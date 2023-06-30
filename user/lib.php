@@ -33,7 +33,7 @@ define('USER_FILTER_STRING', 6);
  * Creates a user
  *
  * @throws moodle_exception
- * @param stdClass|array $user user to create
+ * @param stdClass $user user to create
  * @param bool $updatepassword if true, authentication plugin will update password.
  * @param bool $triggerevent set false if user_created event should not be triggred.
  *             This will not affect user_password_updated event triggering.
@@ -144,7 +144,7 @@ function user_create_user($user, $updatepassword = true, $triggerevent = true) {
  * Update a user with a user object (will compare against the ID)
  *
  * @throws moodle_exception
- * @param stdClass|array $user the user to update
+ * @param stdClass $user the user to update
  * @param bool $updatepassword if true, authentication plugin will update password.
  * @param bool $triggerevent set false if user_updated event should not be triggred.
  *             This will not affect user_password_updated event triggering.
@@ -361,13 +361,19 @@ function user_get_user_details($user, $course = null, array $userfields = array(
             foreach ($fields as $formfield) {
                 if ($formfield->is_visible() and !$formfield->is_empty()) {
 
-                    $userdetails['customfields'][] = [
-                        'name' => $formfield->field->name,
-                        'value' => $formfield->data,
-                        'displayvalue' => $formfield->display_data(),
-                        'type' => $formfield->field->datatype,
-                        'shortname' => $formfield->field->shortname
-                    ];
+                    // TODO: Part of MDL-50728, this conditional coding must be moved to
+                    // proper profile fields API so they are self-contained.
+                    // We only use display_data in fields that require text formatting.
+                    if ($formfield->field->datatype == 'text' or $formfield->field->datatype == 'textarea') {
+                        $fieldvalue = $formfield->display_data();
+                    } else {
+                        // Cases: datetime, checkbox and menu.
+                        $fieldvalue = $formfield->data;
+                    }
+
+                    $userdetails['customfields'][] =
+                        array('name' => $formfield->field->name, 'value' => $fieldvalue,
+                            'type' => $formfield->field->datatype, 'shortname' => $formfield->field->shortname);
                 }
             }
         }
@@ -417,8 +423,8 @@ function user_get_user_details($user, $course = null, array $userfields = array(
         if (in_array('description', $userfields)) {
             // Always return the descriptionformat if description is requested.
             list($userdetails['description'], $userdetails['descriptionformat']) =
-                    \core_external\util::format_text($user->description, $user->descriptionformat,
-                            $usercontext, 'user', 'profile', null);
+                    external_format_text($user->description, $user->descriptionformat,
+                            $usercontext->id, 'user', 'profile', null);
         }
     }
 
@@ -1333,7 +1339,7 @@ function user_get_lastaccess_sql($columnname, $accesssince, $tableprefix, $havea
  * @param string $itemtype - Only user_roles is supported.
  * @param string $itemid - Courseid and userid separated by a :
  * @param string $newvalue - json encoded list of roleids.
- * @return \core\output\inplace_editable|null
+ * @return \core\output\inplace_editable
  */
 function core_user_inplace_editable($itemtype, $itemid, $newvalue) {
     if ($itemtype === 'user_roles') {

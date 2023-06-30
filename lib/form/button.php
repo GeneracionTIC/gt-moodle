@@ -46,9 +46,6 @@ class MoodleQuickForm_button extends HTML_QuickForm_button implements templatabl
     /** @var string html for help button, if empty then no help */
     var $_helpbutton='';
 
-    /** @var bool if true label will be hidden. */
-    protected $_hiddenLabel = false;
-
     /**
      * constructor
      *
@@ -91,14 +88,5 @@ class MoodleQuickForm_button extends HTML_QuickForm_button implements templatabl
         } else {
             return 'default';
         }
-    }
-
-    /**
-     * Sets label to be hidden
-     *
-     * @param bool $hiddenLabel sets if label should be hidden
-     */
-    public function setHiddenLabel($hiddenLabel) {
-        $this->_hiddenLabel = $hiddenLabel;
     }
 }

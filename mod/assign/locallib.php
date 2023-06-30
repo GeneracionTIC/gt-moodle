@@ -195,9 +195,6 @@ class assign {
     /** @var mixed This var can vary between false for no overrides to a stdClass of the overrides for a group */
     private $overridedata;
 
-    /** @var float grade value. */
-    public $grade;
-
     /**
      * Constructor for the base assign class.
      *
@@ -213,6 +210,8 @@ class assign {
      *                      otherwise this class will load one from the context as required.
      */
     public function __construct($coursemodulecontext, $coursemodule, $course) {
+        global $SESSION;
+
         $this->context = $coursemodulecontext;
         $this->course = $course;
 
@@ -227,6 +226,10 @@ class assign {
 
         // Extra entropy is required for uniqid() to work on cygwin.
         $this->useridlistid = clean_param(uniqid('', true), PARAM_ALPHANUM);
+
+        if (!isset($SESSION->mod_assign_useridlist)) {
+            $SESSION->mod_assign_useridlist = [];
+        }
     }
 
     /**
@@ -2747,7 +2750,7 @@ class assign {
 
                 // Override the language and timezone of the "current" user, so that
                 // mail is customised for the receiver.
-                \core\cron::setup_user($user, $course);
+                cron_setup_user($user, $course);
 
                 // Context lookups are already cached.
                 $coursecontext = context_course::instance($course->id);
@@ -2827,7 +2830,7 @@ class assign {
             }
             mtrace('Done processing ' . count($submissions) . ' assignment submissions');
 
-            \core\cron::setup_user();
+            cron_setup_user();
 
             // Free up memory just to be sure.
             unset($courses);
@@ -3348,7 +3351,7 @@ class assign {
         }
 
         $grouping = $this->get_instance()->teamsubmissiongroupingid;
-        $return = groups_get_all_groups($this->get_course()->id, $userid, $grouping, 'g.*', false, true);
+        $return = groups_get_all_groups($this->get_course()->id, $userid, $grouping);
 
         $this->usergroups[$userid] = $return;
 
@@ -9362,13 +9365,6 @@ class assign {
      * @return string The key for the id, or new entry if no $id is passed.
      */
     public function get_useridlist_key($id = null) {
-        global $SESSION;
-
-        // Ensure the user id list cache is initialised.
-        if (!isset($SESSION->mod_assign_useridlist)) {
-            $SESSION->mod_assign_useridlist = [];
-        }
-
         if ($id === null) {
             $id = $this->get_useridlist_key_id();
         }
@@ -9640,8 +9636,8 @@ class assign {
      * Get the correct submission statement depending on single submisison, team submission or team submission
      * where all team memebers must submit.
      *
-     * @param stdClass $adminconfig
-     * @param stdClass $instance
+     * @param array $adminconfig
+     * @param assign $instance
      * @param context $context
      *
      * @return string

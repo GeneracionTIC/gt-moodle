@@ -230,7 +230,13 @@ class report_loglive_table_log extends table_sql {
      * @return string HTML for the event name column
      */
     public function col_eventname($event) {
-        $eventname = $event->get_name();
+        // Event name.
+        if ($this->filterparams->logreader instanceof logstore_legacy\log\store) {
+            // Hack for support of logstore_legacy.
+            $eventname = $event->eventname;
+        } else {
+            $eventname = $event->get_name();
+        }
         if ($url = $event->get_url()) {
             $eventname = $this->action_link($url, $eventname, 'action');
         }

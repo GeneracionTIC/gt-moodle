@@ -342,10 +342,11 @@ function scorm_delete_instance($id) {
  * user has done with a given particular instance of this module
  * Used for user activity reports.
  *
- * @param stdClass $course Course object
- * @param stdClass $user User
- * @param stdClass $mod
- * @param stdClass $scorm The scorm
+ * @global stdClass
+ * @param int $course Course id
+ * @param int $user User id
+ * @param int $mod
+ * @param int $scorm The scorm id
  * @return mixed
  */
 function scorm_user_outline($course, $user, $mod, $scorm) {
@@ -771,7 +772,7 @@ function scorm_option2text($scorm) {
  * Implementation of the function for printing the form elements that control
  * whether the course reset functionality affects the scorm.
  *
- * @param MoodleQuickForm $mform form passed by reference
+ * @param object $mform form passed by reference
  */
 function scorm_reset_course_form_definition(&$mform) {
     $mform->addElement('header', 'scormheader', get_string('modulenameplural', 'scorm'));

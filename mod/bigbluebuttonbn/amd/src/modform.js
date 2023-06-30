@@ -16,7 +16,7 @@
 /**
  * JS for the mod_form page on mod_bigbluebuttonbn plugin.
  *
- * @module      mod_bigbluebuttonbn/modform
+ * @module      mod_bigbluebuttonbn/mod_form
  * @copyright   2021 Blindside Networks Inc
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

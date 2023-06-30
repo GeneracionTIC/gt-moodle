@@ -151,7 +151,6 @@ class flexible_table {
      */
     var $started_output = false;
 
-    /** @var table_dataformat_export_format */
     var $exportclass = null;
 
     /**
@@ -159,16 +158,16 @@ class flexible_table {
      */
     private $prefs = array();
 
-    /** @var string $sheettitle */
+    /** @var $sheettitle */
     protected $sheettitle;
 
-    /** @var string $filename */
+    /** @var $filename */
     protected $filename;
 
     /** @var array $hiddencolumns List of hidden columns. */
     protected $hiddencolumns;
 
-    /** @var bool $resetting Whether the table preferences is resetting. */
+    /** @var $resetting bool Whether the table preferences is resetting. */
     protected $resetting;
 
     /**
@@ -222,8 +221,8 @@ class flexible_table {
 
     /**
      * Get, and optionally set, the export class.
-     * @param table_dataformat_export_format $exportclass (optional) if passed, set the table to use this export class.
-     * @return table_dataformat_export_format the export class in use (after any set).
+     * @param $exportclass (optional) if passed, set the table to use this export class.
+     * @return table_default_export_format_parent the export class in use (after any set).
      */
     function export_class_instance($exportclass = null) {
         if (!is_null($exportclass)) {
@@ -533,6 +532,7 @@ class flexible_table {
     /**
      * Must be called after table is defined. Use methods above first. Cannot
      * use functions below till after calling this method.
+     * @return type?
      */
     function setup() {
 
@@ -567,7 +567,7 @@ class flexible_table {
     /**
      * Get the order by clause from the session or user preferences, for the table with id $uniqueid.
      * @param string $uniqueid the identifier for a table.
-     * @return string SQL fragment that can be used in an ORDER BY clause.
+     * @return SQL fragment that can be used in an ORDER BY clause.
      */
     public static function get_sort_for_table($uniqueid) {
         global $SESSION;
@@ -590,7 +590,7 @@ class flexible_table {
     /**
      * Prepare an an order by clause from the list of columns to be sorted.
      * @param array $cols column name => SORT_ASC or SORT_DESC
-     * @return string SQL fragment that can be used in an ORDER BY clause.
+     * @return SQL fragment that can be used in an ORDER BY clause.
      */
     public static function construct_order_by($cols, $textsortcols=array()) {
         global $DB;
@@ -611,7 +611,7 @@ class flexible_table {
     }
 
     /**
-     * @return string SQL fragment that can be used in an ORDER BY clause.
+     * @return SQL fragment that can be used in an ORDER BY clause.
      */
     public function get_sql_sort() {
         return self::construct_order_by($this->get_sort_columns(), $this->column_textsort);
@@ -1954,15 +1954,6 @@ class flexible_table {
     }
 
     /**
-     * Get the class used as a filterset.
-     *
-     * @return string
-     */
-    public static function get_filterset_class(): string {
-        return static::class . '_filterset';
-    }
-
-    /**
      * Attempt to guess the base URL.
      */
     public function guess_base_url(): void {
@@ -2246,10 +2237,10 @@ class table_dataformat_export_format extends table_default_export_format_parent 
     /** @var \core\dataformat\base $dataformat */
     protected $dataformat;
 
-    /** @var int $rownum */
+    /** @var $rownum */
     protected $rownum = 0;
 
-    /** @var array $columns */
+    /** @var $columns */
     protected $columns;
 
     /**

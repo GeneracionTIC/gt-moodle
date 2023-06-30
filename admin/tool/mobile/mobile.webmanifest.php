@@ -41,7 +41,7 @@ if (!empty($CFG->enablemobilewebservice) && !empty($mobilesettings->enablesmarta
 
     $manifest = new StdClass;
     $manifest->short_name = format_string($SITE->shortname, true, [
-        'context' => \core\context\system::instance(),
+        'context' => context_system::instance(),
     ]);
     $manifest->prefer_related_applications = true;
     $manifest->icons = [(object)

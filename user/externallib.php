@@ -14,13 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-use core_external\external_description;
-use core_external\external_value;
-use core_external\external_format_value;
-use core_external\external_single_structure;
-use core_external\external_multiple_structure;
-use core_external\external_function_parameters;
-use core_external\external_warnings;
+/**
+ * External user API
+ *
+ * @package    core_user
+ * @category   external
+ * @copyright  2009 Petr Skodak
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+defined('MOODLE_INTERNAL') || die();
+require_once("$CFG->libdir/externallib.php");
 
 /**
  * User external functions
@@ -31,7 +35,7 @@ use core_external\external_warnings;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @since Moodle 2.2
  */
-class core_user_external extends \core_external\external_api {
+class core_user_external extends external_api {
 
     /**
      * Returns description of method parameters
@@ -1112,7 +1116,7 @@ class core_user_external extends \core_external\external_api {
      * Create user return value description.
      *
      * @param array $additionalfields some additional field
-     * @return external_description
+     * @return single_structure_description
      */
     public static function user_description($additionalfields = array()) {
         $userfields = array(
@@ -1149,9 +1153,7 @@ class core_user_external extends \core_external\external_api {
                 new external_single_structure(
                     array(
                         'type'  => new external_value(PARAM_ALPHANUMEXT, 'The type of the custom field - text field, checkbox...'),
-                        'value' => new external_value(PARAM_RAW, 'The value of the custom field (as stored in the database)'),
-                        'displayvalue' => new external_value(PARAM_RAW, 'The value of the custom field for display',
-                            VALUE_OPTIONAL),
+                        'value' => new external_value(PARAM_RAW, 'The value of the custom field'),
                         'name' => new external_value(PARAM_RAW, 'The name of the custom field'),
                         'shortname' => new external_value(PARAM_RAW, 'The shortname of the custom field - to be able to build the field class in the code'),
                     )

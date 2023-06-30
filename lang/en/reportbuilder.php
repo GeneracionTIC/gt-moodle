@@ -120,7 +120,6 @@ $string['errorsourceinvalid'] = 'Could not find valid report source';
 $string['errorsourceunavailable'] = 'Report source is not available';
 $string['filteradded'] = 'Added filter \'{$a}\'';
 $string['filtercontains'] = 'Contains';
-$string['filterdatebefore'] = 'Before';
 $string['filterdatecurrent'] = 'Current';
 $string['filterdatedays'] = 'day(s)';
 $string['filterdatefrom'] = 'Date from';

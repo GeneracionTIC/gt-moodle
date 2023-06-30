@@ -833,8 +833,7 @@ class group_non_members_selector extends groups_user_selector_base {
      * @return string
      */
     public function output_user($user) {
-        return get_string('usergroupselectorcount', 'core_user',
-            (object) ['groupcount' => $user->numgroups, 'fullname' => parent::output_user($user)]);
+        return parent::output_user($user) . ' (' . $user->numgroups . ')';
     }
 
     /**

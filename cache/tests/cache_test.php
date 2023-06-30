@@ -2919,7 +2919,7 @@ class cache_test extends \advanced_testcase {
     public function test_static_acceleration_values_performance(
         $value,
         array $firstfetchstats,
-        array $secondfetchstats,
+        array $secondfetchstats
     ): void {
         // Note: We need to modify perfdebug to test this.
         global $CFG;
@@ -2942,7 +2942,7 @@ class cache_test extends \advanced_testcase {
 
         $checkstats = function(
             array $start,
-            array $expectedstats,
+            array $expectedstats
         ): array {
             $applicationid = 'phpunit/accelerated';
             $endstats = cache_helper::get_stats();
@@ -2958,7 +2958,7 @@ class cache_test extends \advanced_testcase {
                     $this->assertEquals(
                         $value,
                         $diff,
-                        "Expected $cachename $type to be $value, got $diff",
+                        "Expected $cachename $type to be $value, got $diff"
                     );
                 }
             }

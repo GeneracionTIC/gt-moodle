@@ -41,8 +41,9 @@ Feature: We can use calculated grade totals
       | grade_aggregations_visible | Mean of grades,Weighted mean of grades,Simple weighted mean of grades,Mean of grades (with extra credits),Median of grades,Lowest grade,Highest grade,Mode of grades,Natural |
     And I log out
     And I log in as "teacher1"
-    And I am on "Course 1" course homepage with editing mode on
+    And I am on "Course 1" course homepage
     And I navigate to "View > Grader report" in the course gradebook
+    And I turn editing mode on
     And I change window size to "large"
     And I give the grade "60.00" to the user "Student 1" for the grade item "Test assignment one &"
     And I give the grade "20.00" to the user "Student 1" for the grade item "Test assignment two"
@@ -53,9 +54,12 @@ Feature: We can use calculated grade totals
     And I give the grade "5.00" to the user "Student 1" for the grade item "Test assignment nine"
     And I press "Save changes"
     And I change window size to "large"
-    And I hide the grade item "Test assignment two" of type "gradeitem" on "grader" page
-    And I hide the grade item "Test assignment five" of type "gradeitem" on "grader" page
-    And I hide the grade item "Test assignment eight" of type "gradeitem" on "grader" page
+    And I set the following settings for grade item "Test assignment two":
+      | Hidden | 1 |
+    And I set the following settings for grade item "Test assignment five":
+      | Hidden | 1 |
+    And I set the following settings for grade item "Test assignment eight":
+      | Hidden | 1 |
     And I change window size to "medium"
     And I navigate to "Setup > Course grade settings" in the course gradebook
     And I set the field "Grade display type" to "Real (percentage)"
@@ -63,11 +67,11 @@ Feature: We can use calculated grade totals
 
   Scenario: Mean of grades aggregation
     When I navigate to "View > Grader report" in the course gradebook
-    And I set the following settings for grade item "Course 1" of type "course" on "grader" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation          | Mean of grades |
-    And I set the following settings for grade item "Sub category 1" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 1":
       | Aggregation          | Mean of grades |
-    And I set the following settings for grade item "Sub category 2 &" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 2 &":
       | Aggregation          | Mean of grades |
       | Exclude empty grades | 0              |
     And I turn editing mode off
@@ -82,16 +86,16 @@ Feature: We can use calculated grade totals
 
   Scenario: Weighted mean of grades aggregation
     When I navigate to "View > Grader report" in the course gradebook
-    And I set the following settings for grade item "Course 1" of type "course" on "grader" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation          | Weighted mean of grades |
-    And I set the following settings for grade item "Sub category 1" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 1":
       | Aggregation          | Weighted mean of grades |
       | Item weight          | 1                       |
-    And I set the following settings for grade item "Sub category 2 &" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 2 &":
       | Aggregation          | Weighted mean of grades |
       | Item weight          | 1                       |
       | Exclude empty grades | 0                       |
-    And I set the following settings for grade item "Test assignment one &" of type "gradeitem" on "grader" page:
+    And I set the following settings for grade item "Test assignment one &":
       | Item weight | 3 |
     And I turn editing mode off
     Then I should see "27.14 (27.14 %)" in the ".course" "css_element"
@@ -105,14 +109,14 @@ Feature: We can use calculated grade totals
 
   Scenario: Simple weighted mean of grades aggregation
     When I navigate to "View > Grader report" in the course gradebook
-    And I set the following settings for grade item "Course 1" of type "course" on "grader" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation          | Simple weighted mean of grades |
-    And I set the following settings for grade item "Sub category 1" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 1":
       | Aggregation          | Simple weighted mean of grades |
-    And I set the following settings for grade item "Sub category 2 &" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 2 &":
       | Aggregation          | Simple weighted mean of grades |
       | Exclude empty grades | 0                              |
-    And I set the following settings for grade item "Test assignment one &" of type "gradeitem" on "grader" page:
+    And I set the following settings for grade item "Test assignment one &":
       | Extra credit | 1 |
     And I turn editing mode off
     Then I should see "45.19 (45.19 %)" in the ".course" "css_element"
@@ -126,14 +130,14 @@ Feature: We can use calculated grade totals
 
   Scenario: Mean of grades (with extra credits) aggregation
     When I navigate to "View > Grader report" in the course gradebook
-    And I set the following settings for grade item "Course 1" of type "course" on "grader" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation          | Mean of grades (with extra credits) |
-    And I set the following settings for grade item "Sub category 1" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 1":
       | Aggregation          | Mean of grades (with extra credits) |
-    And I set the following settings for grade item "Sub category 2 &" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 2 &":
       | Aggregation          | Mean of grades (with extra credits) |
       | Exclude empty grades | 0                                   |
-    And I set the following settings for grade item "Test assignment one &" of type "gradeitem" on "grader" page:
+    And I set the following settings for grade item "Test assignment one &":
       | Extra credit weight  | 2 |
     And I turn editing mode off
     Then I should see "42.50 (42.50 %)" in the ".course" "css_element"
@@ -147,14 +151,13 @@ Feature: We can use calculated grade totals
 
   Scenario: Median of grades aggregation
     When I navigate to "View > Grader report" in the course gradebook
-    And I set the following settings for grade item "Course 1" of type "course" on "grader" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation | Median of grades |
-    And I set the following settings for grade item "Sub category 1" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 1":
       | Aggregation | Median of grades |
-    And I set the following settings for grade item "Sub category 2 &" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 2 &":
       | Aggregation          | Median of grades |
       | Exclude empty grades | 0                |
-    And I press "Save changes"
     And I turn editing mode off
     Then I should see "26.67 (26.67 %)" in the ".course" "css_element"
     And I navigate to "Setup > Course grade settings" in the course gradebook
@@ -167,16 +170,16 @@ Feature: We can use calculated grade totals
 
   Scenario: Lowest grade aggregation
     When I navigate to "View > Grader report" in the course gradebook
-    And I set the following settings for grade item "Course 1" of type "course" on "grader" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation | Lowest grade |
-    And I set the following settings for grade item "Sub category 1" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 1":
       | Aggregation | Lowest grade |
-    And I set the following settings for grade item "Sub category 2 &" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 2 &":
       | Aggregation          | Lowest grade |
       | Exclude empty grades | 0            |
-    And I set the following settings for grade item "Test assignment five" of type "gradeitem" on "grader" page:
+    And I set the following settings for grade item "Test assignment five":
       | Hidden | 1 |
-    And I set the following settings for grade item "Test assignment four" of type "gradeitem" on "grader" page:
+    And I set the following settings for grade item "Test assignment four":
       | Hidden | 1 |
     And I turn editing mode off
     Then I should see "0.00 (0.00 %)" in the ".course" "css_element"
@@ -190,14 +193,14 @@ Feature: We can use calculated grade totals
 
   Scenario: Highest grade aggregation
     When I navigate to "View > Grader report" in the course gradebook
-    And I set the following settings for grade item "Course 1" of type "course" on "grader" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation          | Highest grade |
-    And I set the following settings for grade item "Sub category 1" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 1":
       | Aggregation          | Highest grade |
-    And I set the following settings for grade item "Sub category 2 &" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 2 &":
       | Aggregation          | Highest grade |
       | Exclude empty grades | 0             |
-    And I set the following settings for grade item "Test assignment one &" of type "gradeitem" on "grader" page:
+    And I set the following settings for grade item "Test assignment one &":
       | Hidden | 1 |
     And I turn editing mode off
     Then I should see "50.00 (50.00 %)" in the ".course" "css_element"
@@ -211,14 +214,14 @@ Feature: We can use calculated grade totals
 
   Scenario: Mode of grades aggregation
     When I navigate to "View > Grader report" in the course gradebook
-    And I set the following settings for grade item "Course 1" of type "course" on "grader" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation          | Mode of grades |
-    And I set the following settings for grade item "Sub category 1" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 1":
       | Aggregation          | Mode of grades |
-    And I set the following settings for grade item "Sub category 2 &" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 1":
       | Aggregation          | Mode of grades |
       | Exclude empty grades | 0              |
-    And I set the following settings for grade item "Test assignment one &" of type "gradeitem" on "grader" page:
+    And I set the following settings for grade item "Test assignment one &":
       | Hidden | 1 |
     And I turn editing mode off
     Then I should see "50.00 (50.00 %)" in the ".course" "css_element"
@@ -243,7 +246,7 @@ Feature: We can use calculated grade totals
       | itemname              | course | outcome | gradetype | scale      |
       | Test outcome item one | C1     | OT1     | Scale     | Test Scale |
     And I navigate to "Setup > Gradebook setup" in the course gradebook
-    And I set the following settings for grade item "Course 1" of type "course" on "setup" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation                     | Natural |
       | Include outcomes in aggregation | 1       |
       | Exclude empty grades            | 0       |
@@ -265,8 +268,8 @@ Feature: We can use calculated grade totals
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I navigate to "Setup > Gradebook setup" in the course gradebook
-    And I set the following settings for grade item "Test outcome item one" of type "gradeitem" on "setup" page:
-      | Extra credit     | 1   |
+    And I set the following settings for grade item "Test outcome item one":
+     | Extra credit     | 1   |
     And I log out
     And I log in as "student1"
     And I follow "Grades" in the user menu
@@ -277,7 +280,7 @@ Feature: We can use calculated grade totals
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I navigate to "Setup > Gradebook setup" in the course gradebook
-    And I set the following settings for grade item "Course 1" of type "course" on "setup" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation                     | Natural |
       | Include outcomes in aggregation | 0       |
     And I log out
@@ -300,13 +303,13 @@ Feature: We can use calculated grade totals
       | itemname              | course | outcome | gradetype | scale      |
       | Test outcome item one | C1     | OT1     | Scale     | Test Scale |
     And I navigate to "Setup > Gradebook setup" in the course gradebook
-    And I set the following settings for grade item "Course 1" of type "course" on "setup" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation                     | Natural |
       | Include outcomes in aggregation | 1       |
       | Exclude empty grades            | 0       |
-    And I set the following settings for grade item "Test outcome item one" of type "gradeitem" on "setup" page:
-      | Weight adjusted  | 1   |
-      | aggregationcoef2 | 100 |
+    And I set the following settings for grade item "Test outcome item one":
+     | Weight adjusted  | 1   |
+     | aggregationcoef2 | 100 |
     And I change window size to "large"
     And I navigate to "View > Grader report" in the course gradebook
     And I give the grade "Excellent" to the user "Student 1" for the grade item "Test outcome item one"
@@ -324,19 +327,19 @@ Feature: We can use calculated grade totals
 
   Scenario: Natural aggregation
     When I navigate to "View > Grader report" in the course gradebook
-    And I set the following settings for grade item "Course 1" of type "course" on "grader" page:
+    And I set the following settings for grade item "Sub category 1":
       | Aggregation          | Natural |
       | Exclude empty grades | 0       |
-    And I set the following settings for grade item "Sub category 1" of type "category" on "grader" page:
-      | Aggregation          | Natural |
-      | Exclude empty grades | 0       |
-    And I set the following settings for grade item "Sub category 2 &" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 2 &":
       | Aggregation          | Natural |
       | Exclude empty grades | 1       |
-    And I set the following settings for grade item "Test assignment six" of type "gradeitem" on "grader" page:
+    And I set the following settings for grade item "Course 1":
+      | Aggregation          | Natural |
+      | Exclude empty grades | 0       |
+    And I set the following settings for grade item "Test assignment six":
       | Weight adjusted  | 1   |
       | aggregationcoef2 | 50  |
-    And I set the following settings for grade item "Test assignment three" of type "gradeitem" on "grader" page:
+    And I set the following settings for grade item "Test assignment three":
       | Extra credit | 1 |
     And I turn editing mode off
     Then I should see "152.68 (24.43 %)" in the ".course" "css_element"
@@ -382,13 +385,13 @@ Feature: We can use calculated grade totals
     And I am on "Course 1" course homepage
     And I navigate to "View > Grader report" in the course gradebook
     And I turn editing mode on
-    And I set the following settings for grade item "Course 1" of type "course" on "grader" page:
+    And I set the following settings for grade item "Sub category 1":
       | Aggregation          | Natural |
       | Exclude empty grades | 0       |
-    And I set the following settings for grade item "Sub category 1" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 2 &":
       | Aggregation          | Natural |
       | Exclude empty grades | 0       |
-    And I set the following settings for grade item "Sub category 2 &" of type "category" on "grader" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation          | Natural |
       | Exclude empty grades | 0       |
     And I navigate to "Setup > Gradebook setup" in the course gradebook
@@ -421,12 +424,12 @@ Feature: We can use calculated grade totals
     And I turn editing mode off
     Then I should see "250.00 (25.25 %)" in the ".course" "css_element"
     And I turn editing mode on
-    And I set the following settings for grade item "Manual item 2" of type "gradeitem" on "grader" page:
+    And I set the following settings for grade item "Manual item 2":
       | Extra credit | 1 |
     And I turn editing mode off
     And I should see "270.00 (27.27 %)" in the ".course" "css_element"
     And I turn editing mode on
-    And I set the following settings for grade item "Manual item 2" of type "gradeitem" on "grader" page:
+    And I set the following settings for grade item "Manual item 2":
       | Rescale existing grades | No |
       | Maximum grade | 200 |
       | Extra credit  | 0   |
@@ -439,7 +442,7 @@ Feature: We can use calculated grade totals
     And I turn editing mode off
     And I should see "270.00 (22.69 %)" in the ".course" "css_element"
     And I turn editing mode on
-    And I set the following settings for grade item "Manual item 2" of type "gradeitem" on "grader" page:
+    And I set the following settings for grade item "Manual item 2":
       | Rescale existing grades | No |
       | Maximum grade | 100 |
       | Extra credit  | 0   |
@@ -463,11 +466,11 @@ Feature: We can use calculated grade totals
   Scenario: Natural aggregation from the setup screen
     And I navigate to "Setup > Gradebook setup" in the course gradebook
 
-    And I set the following settings for grade item "Course 1" of type "course" on "setup" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation          | Natural |
-    And I set the following settings for grade item "Sub category 1" of type "category" on "setup" page:
+    And I set the following settings for grade item "Sub category 1":
       | Aggregation          | Natural |
-    And I set the following settings for grade item "Sub category 2 &" of type "category" on "setup" page:
+    And I set the following settings for grade item "Sub category 2 &":
       | Aggregation          | Natural |
 
     And I set the field "Override weight of Test assignment one &" to "1"
@@ -514,13 +517,13 @@ Feature: We can use calculated grade totals
 
   Scenario: Natural aggregation with weights of zero
     When I navigate to "View > Grader report" in the course gradebook
-    And I set the following settings for grade item "Course 1" of type "course" on "grader" page:
+    And I set the following settings for grade item "Course 1":
       | Aggregation          | Natural |
       | Exclude empty grades | 0       |
-    And I set the following settings for grade item "Sub category 1" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 1":
       | Aggregation          | Natural |
       | Exclude empty grades | 0       |
-    And I set the following settings for grade item "Sub category 2 &" of type "category" on "grader" page:
+    And I set the following settings for grade item "Sub category 2 &":
       | Aggregation          | Natural |
       | Exclude empty grades | 0       |
     And I turn editing mode off

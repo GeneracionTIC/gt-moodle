@@ -519,7 +519,7 @@ abstract class repository implements cacheable_object {
     public $disabled = false;
     /** @var int repository instance id */
     public $id;
-    /** @var context current context */
+    /** @var stdClass current context */
     public $context;
     /** @var array repository options */
     public $options;
@@ -531,10 +531,6 @@ abstract class repository implements cacheable_object {
     public $instance;
     /** @var string Type of repository (webdav, google_docs, dropbox, ...). Read from $this->get_typename(). */
     protected $typename;
-    /** @var string instance name. */
-    public $name;
-    /** @var bool true if the super construct is called, otherwise false. */
-    public $super_called;
 
     /**
      * Constructor
@@ -2307,7 +2303,7 @@ abstract class repository implements cacheable_object {
      * format and stores formatted values.
      *
      * @param array|stdClass $listing result of get_listing() or search() or file_get_drafarea_files()
-     * @return stdClass
+     * @return array
      */
     public static function prepare_listing($listing) {
         $wasobject = false;
@@ -2425,7 +2421,7 @@ abstract class repository implements cacheable_object {
     /**
      * Edit/Create Admin Settings Moodle form
      *
-     * @param MoodleQuickForm $mform Moodle form (passed by reference)
+     * @param moodleform $mform Moodle form (passed by reference)
      * @param string $classname repository class name
      */
     public static function type_config_form($mform, $classname = 'repository') {
@@ -2890,10 +2886,6 @@ final class repository_instance_form extends moodleform {
     protected $instance;
     /** @var string repository plugin type */
     protected $plugin;
-    /** @var string repository type ID */
-    protected $typeid;
-    /** @var string repository context ID */
-    protected $contextid;
 
     /**
      * Added defaults to moodle form
@@ -3016,8 +3008,6 @@ final class repository_type_form extends moodleform {
     protected $plugin;
     /** @var string action */
     protected $action;
-    /** @var string plugin name */
-    protected $pluginname;
 
     /**
      * Definition of the moodleform
@@ -3118,12 +3108,12 @@ final class repository_type_form extends moodleform {
 /**
  * Generate all options needed by filepicker
  *
- * @param stdClass $args including following keys
+ * @param array $args including following keys
  *          context
  *          accepted_types
  *          return_types
  *
- * @return stdClass the list of repository instances, including meta infomation, containing the following keys
+ * @return array the list of repository instances, including meta infomation, containing the following keys
  *          externallink
  *          repositories
  *          accepted_types

@@ -622,8 +622,7 @@ class question_attempt {
 
         // No files yet.
         $draftid = 0; // Will be filled in by file_prepare_draft_area.
-        $filearea = question_file_saver::clean_file_area_name('response_' . $name);
-        file_prepare_draft_area($draftid, $contextid, 'question', $filearea, null);
+        file_prepare_draft_area($draftid, $contextid, 'question', 'response_' . $name, null);
         return $draftid;
     }
 

@@ -17,8 +17,8 @@
 namespace quiz_statistics\task;
 
 use core\dml\sql_join;
-use mod_quiz\quiz_attempt;
-use mod_quiz\quiz_settings;
+use quiz_attempt;
+use quiz;
 use quiz_statistics_report;
 
 defined('MOODLE_INTERNAL') || die();
@@ -102,7 +102,7 @@ class recalculate extends \core\task\scheduled_task {
                     userdate(time(), $dateformat) . " ...");
 
             try {
-                $quizobj = quiz_settings::create($latestattempt->quizid);
+                $quizobj = quiz::create($latestattempt->quizid);
                 $report = new quiz_statistics_report();
                 $report->clear_cached_data($qubaids);
                 $report->calculate_questions_stats_for_question_bank($quizobj->get_quizid());

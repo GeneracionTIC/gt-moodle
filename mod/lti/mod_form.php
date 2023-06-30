@@ -76,6 +76,8 @@ class mod_lti_mod_form extends moodleform_mod {
             $showtypes = !$typeid;
         }
 
+        $this->typeid = 0;
+
         $mform =& $this->_form;
 
         // Adding the "general" fieldset, where all the common settings are shown.
@@ -296,7 +298,7 @@ class mod_lti_mod_form extends moodleform_mod {
         $mform->disabledIf('instructorchoicesendemailaddr', 'typeid', 'in', $toolproxy);
 
         $mform->addElement('advcheckbox', 'instructorchoiceacceptgrades', get_string('accept_grades', 'lti'));
-        $mform->setDefault('instructorchoiceacceptgrades', '0');
+        $mform->setDefault('instructorchoiceacceptgrades', '1');
         $mform->addHelpButton('instructorchoiceacceptgrades', 'accept_grades', 'lti');
         $mform->disabledIf('instructorchoiceacceptgrades', 'typeid', 'in', $toolproxy);
 

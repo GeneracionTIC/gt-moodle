@@ -66,7 +66,7 @@ export default class Component extends DndCmItem {
      * @return {Component}
      */
     static init(target, selectors) {
-        return new this({
+        return new Component({
             element: document.getElementById(target),
             selectors,
         });
@@ -100,8 +100,8 @@ export default class Component extends DndCmItem {
             this.reactive.dispatch('setPageItem', 'cm', this.id, true);
             this.element.scrollIntoView({block: "center"});
         }
-        // Add anchor logic if the element is not user visible or the element hasn't URL.
-        if (!cm.uservisible || !cm.url) {
+        // Add anchor logic if the element is not user visible.
+        if (!cm.uservisible) {
             this.addEventListener(
                 this.getElement(this.selectors.CM_NAME),
                 'click',

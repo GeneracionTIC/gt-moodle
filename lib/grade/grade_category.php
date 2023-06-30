@@ -161,12 +161,6 @@ class grade_category extends grade_object {
     protected $canapplylimitrules;
 
     /**
-     * e.g. 'category', 'course' and 'mod', 'blocks', 'import', etc...
-     * @var string $itemtype
-     */
-    public $itemtype;
-
-    /**
      * Builds this category's path string based on its parents (if any) and its own id number.
      * This is typically done just before inserting this object in the DB for the first time,
      * or when a new parent is added or changed. It is a recursive function: once the calling
@@ -2564,7 +2558,7 @@ class grade_category extends grade_object {
     /**
      * Overrides grade_object::set_properties() to add special handling for changes to category aggregation types
      *
-     * @param grade_category $instance the object to set the properties on
+     * @param stdClass $instance the object to set the properties on
      * @param array|stdClass $params Either an associative array or an object containing property name, property value pairs
      */
     public static function set_properties(&$instance, $params) {

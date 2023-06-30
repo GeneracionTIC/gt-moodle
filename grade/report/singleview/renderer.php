@@ -46,7 +46,6 @@ class gradereport_singleview_renderer extends plugin_renderer_base {
     public function users_selector(object $course, ?int $userid = null, ?int $groupid = null): string {
 
         $data = [
-            'name' => 'userid',
             'courseid' => $course->id,
             'groupid' => $groupid ?? 0,
         ];
@@ -59,7 +58,6 @@ class gradereport_singleview_renderer extends plugin_renderer_base {
                 'text' => fullname($user),
                 'additionaltext' => $user->email,
             ];
-            $data['userid'] = $userid;
         }
 
         $this->page->requires->js_call_amd('gradereport_singleview/user', 'init');
@@ -76,7 +74,6 @@ class gradereport_singleview_renderer extends plugin_renderer_base {
     public function grade_items_selector(object $course, ?int $gradeitemid = null): string {
 
         $data = [
-            'name' => 'itemid',
             'courseid' => $course->id,
         ];
 
@@ -86,7 +83,6 @@ class gradereport_singleview_renderer extends plugin_renderer_base {
             $data['selectedoption'] = [
                 'text' => $gradeitemname,
             ];
-            $data['itemid'] = $gradeitemid;
         }
 
         $this->page->requires->js_call_amd('gradereport_singleview/grade', 'init');

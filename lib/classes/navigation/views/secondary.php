@@ -122,7 +122,6 @@ class secondary extends view {
                 'backup' => 9,
                 'restore' => 10,
                 'competencybreakdown' => 11,
-                'sendtomoodlenet' => 16,
             ],
             self::TYPE_CUSTOM => [
                 'advgrading' => 2,

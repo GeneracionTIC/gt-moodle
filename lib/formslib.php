@@ -134,7 +134,7 @@ abstract class moodleform {
     /** @var MoodleQuickForm quickform object definition */
     protected $_form;
 
-    /** @var mixed globals workaround */
+    /** @var array globals workaround */
     protected $_customdata;
 
     /** @var array submitted form data when using mforms with ajax */
@@ -691,7 +691,7 @@ abstract class moodleform {
      *
      * note: $slashed param removed
      *
-     * @return stdClass|null submitted data; NULL if not valid or not submitted or cancelled
+     * @return object submitted data; NULL if not valid or not submitted or cancelled
      */
     function get_data() {
         $mform =& $this->_form;
@@ -714,7 +714,7 @@ abstract class moodleform {
      * Return submitted data without validation or NULL if there is no submitted data.
      * note: $slashed param removed
      *
-     * @return stdClass|null submitted data; NULL if not submitted
+     * @return object submitted data; NULL if not submitted
      */
     function get_submitted_data() {
         $mform =& $this->_form;
@@ -1661,12 +1661,6 @@ class MoodleQuickForm extends HTML_QuickForm_DHTMLRulesTableless {
      */
     const DEP_HIDE = 1;
 
-    /** @var string request class HTML. */
-    protected $_reqHTML;
-
-    /** @var string advanced class HTML. */
-    protected $_advancedHTML;
-
     /**
      * Class constructor - same parameters as HTML_QuickForm_DHTMLRulesTableless
      *
@@ -2032,7 +2026,7 @@ class MoodleQuickForm extends HTML_QuickForm_DHTMLRulesTableless {
      * clean their own data.
      *
      * @param string $elementname
-     * @param string $paramtype defines type of data contained in element. Use the constants PARAM_*.
+     * @param int $paramtype defines type of data contained in element. Use the constants PARAM_*.
      *        {@link lib/moodlelib.php} for defined parameter types
      */
     function setType($elementname, $paramtype) {
@@ -2324,9 +2318,9 @@ class MoodleQuickForm extends HTML_QuickForm_DHTMLRulesTableless {
      * use addGroupRule instead of addRule.
      *
      * @param string $element Form element name
-     * @param string|null $message Message to display for invalid data
+     * @param string $message Message to display for invalid data
      * @param string $type Rule type, use getRegisteredRules() to get types
-     * @param mixed $format (optional)Required for extra rule data
+     * @param string $format (optional)Required for extra rule data
      * @param string $validation (optional)Where to perform validation: "server", "client"
      * @param bool $reset Client-side validation: reset the form element to its original value if there is an error?
      * @param bool $force Force the rule to be applied, even if the target form element does not exist
@@ -3068,12 +3062,6 @@ class MoodleQuickForm_Renderer extends HTML_QuickForm_Renderer_Tableless{
      */
     var $_collapseButtons = '';
 
-    /** @var string request class HTML. */
-    protected $_reqHTML;
-
-    /** @var string advanced class HTML. */
-    protected $_advancedHTML;
-
     /**
      * Constructor
      */
@@ -3311,7 +3299,7 @@ class MoodleQuickForm_Renderer extends HTML_QuickForm_Renderer_Tableless{
      * Adds required note, form attributes, validation javascript and form content.
      *
      * @global moodle_page $PAGE
-     * @param MoodleQuickForm $form Passed by reference
+     * @param moodleform $form Passed by reference
      */
     function finishForm(&$form){
         global $PAGE;

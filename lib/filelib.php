@@ -3112,7 +3112,7 @@ function get_moodle_proxy_url() {
  * @license   http://www.gnu.org/copyleft/gpl.html GNU Public License
  */
 class curl {
-    /** @var curl_cache|false Caches http request contents */
+    /** @var bool Caches http request contents */
     public  $cache    = false;
     /** @var bool Uses proxy, null means automatic based on URL */
     public  $proxy    = null;
@@ -3154,8 +3154,6 @@ class curl {
     private $ignoresecurity;
     /** @var array $mockresponses For unit testing only - return the head of this list instead of making the next request. */
     private static $mockresponses = [];
-    /** @var array temporary params value if the value is not belongs to class stored_file. */
-    public $_tmp_file_post_params = [];
 
     /**
      * Curl constructor.
@@ -3460,7 +3458,7 @@ class curl {
     /**
      * Set options for individual curl instance
      *
-     * @param resource|CurlHandle $curl A curl handle
+     * @param resource $curl A curl handle
      * @param array $options
      * @return resource The curl handle
      */
@@ -4244,9 +4242,6 @@ class curl_cache {
     /** @var string Path to cache directory */
     public $dir = '';
 
-    /** @var int the repositorycacheexpire config value. */
-    private $ttl;
-
     /**
      * Constructor
      *
@@ -4369,7 +4364,7 @@ class curl_cache {
  * @todo MDL-31088 file serving improments
  */
 function file_pluginfile($relativepath, $forcedownload, $preview = null, $offline = false, $embed = false) {
-    global $DB, $CFG, $USER, $OUTPUT;
+    global $DB, $CFG, $USER;
     // relative path must start with '/'
     if (!$relativepath) {
         throw new \moodle_exception('invalidargorconf');
@@ -4921,18 +4916,6 @@ function file_pluginfile($relativepath, $forcedownload, $preview = null, $offlin
 
             \core\session\manager::write_close(); // Unlock session during file serving.
             send_stored_file($file, 60*60, 0, $forcedownload, $sendfileoptions);
-
-        } else if ($filearea === 'generated') {
-            if ($CFG->forcelogin) {
-                require_login($course);
-            } else if ($course->id != SITEID) {
-                require_login($course);
-            }
-
-            $svg = $OUTPUT->get_generated_svg_for_id($course->id);
-
-            \core\session\manager::write_close(); // Unlock session during file serving.
-            send_file($svg, 'course.svg', 60 * 60, 0, true, $forcedownload);
 
         } else {
             send_file_not_found();

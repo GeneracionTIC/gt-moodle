@@ -16,15 +16,13 @@
 /**
  * A small modal to search grade items within the gradebook.
  *
- * @module    gradereport_singleview/grade
+ * @module    gradereport_singleview
  * @copyright 2022 Mathew May <mathew.solutions>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import * as FocusLockManager from 'core/local/aria/focuslock';
 import Pending from 'core/pending';
 import * as Templates from 'core/templates';
-import Url from 'core/url';
 import * as Repository from 'core_grades/searchwidget/repository';
 import * as WidgetBase from 'core_grades/searchwidget/basewidget';
 import $ from 'jquery';
@@ -37,11 +35,9 @@ import * as Selectors from 'core_grades/searchwidget/selectors';
  * @method init
  */
 export const init = () => {
-    if (document.querySelector(Selectors.elements.getSearchWidgetSelector('grade'))) {
-        const pendingPromise = new Pending();
-        registerListenerEvents();
-        pendingPromise.resolve();
-    }
+    const pendingPromise = new Pending();
+    registerListenerEvents();
+    pendingPromise.resolve();
 };
 
 /**
@@ -52,11 +48,9 @@ export const init = () => {
 const registerListenerEvents = () => {
     let {bodyPromiseResolver, bodyPromise} = WidgetBase.promisesAndResolvers();
     const dropdownMenuContainer = document.querySelector(Selectors.elements.getSearchWidgetDropdownSelector('grade'));
-    const menuContainer = document.querySelector(Selectors.elements.getSearchWidgetSelector('grade'));
-    const inputElement = menuContainer.querySelector('input[name="itemid"]');
 
     // Handle the 'shown.bs.dropdown' event (Fired when the dropdown menu is fully displayed).
-    $(menuContainer).on('show.bs.dropdown', async(e) => {
+    $(Selectors.elements.getSearchWidgetSelector('grade')).on('show.bs.dropdown', async(e) => {
         const courseID = e.relatedTarget.dataset.courseid;
         // Display a loading icon in the dropdown menu container until the body promise is resolved.
         await WidgetBase.showLoader(dropdownMenuContainer);
@@ -80,45 +74,24 @@ const registerListenerEvents = () => {
             dropdownMenuContainer,
             bodyPromise,
             data.gradeitems,
-            searchGradeitems(),
-            null,
-            afterSelect
+            searchGradeitems()
         );
 
         // Resolvers for passed functions in the modal creation.
         bodyPromiseResolver(Templates.render('gradereport_singleview/gradesearch_body', []));
-
-        // Lock tab control. It has to be locked because the dropdown's role is dialog.
-        FocusLockManager.trapFocus(dropdownMenuContainer);
     });
 
     // Handle the 'hide.bs.dropdown' event (Fired when the dropdown menu is being closed).
-    $(menuContainer).on('hide.bs.dropdown', () => {
-        FocusLockManager.untrapFocus();
-    });
-
-    inputElement.addEventListener('change', e => {
-        const toggle = menuContainer.querySelector('.dropdown-toggle');
-        const courseId = toggle.dataset.courseid;
-        const actionUrl = Url.relativeUrl(
-            '/grade/report/singleview/index.php',
-            {
-                id: courseId,
-                item: 'grade',
-                itemid: e.target.value
-            },
-            false
-        );
-        location.href = actionUrl;
-
-        e.stopPropagation();
+    $(Selectors.elements.getSearchWidgetSelector('grade')).on('hide.bs.dropdown', () => {
+        // Reset the state once the grade item menu dropdown is closed.
+        dropdownMenuContainer.innerHTML = '';
     });
 };
 
 /**
  * Define how we want to search and filter grade items when the user decides to input a search value.
  *
- * @method searchGradeitems
+ * @method registerListenerEvents
  * @returns {function(): function(*, *): (*)}
  */
 const searchGradeitems = () => {
@@ -138,21 +111,4 @@ const searchGradeitems = () => {
             return searchResults;
         };
     };
-};
-
-/**
- * Define the action to be performed when an item is selected by the search widget.
- *
- * @param {String} selected The selected item's value.
- */
-const afterSelect = (selected) => {
-    const menuContainer = document.querySelector(Selectors.elements.getSearchWidgetSelector('grade'));
-    const inputElement = menuContainer.querySelector('input[name="itemid"]');
-
-    $(menuContainer).dropdown('hide'); // Otherwise the dropdown stays open when user choose an option using keyboard.
-
-    if (inputElement.value != selected) {
-        inputElement.value = selected;
-        inputElement.dispatchEvent(new Event('change', {bubbles: true}));
-    }
 };

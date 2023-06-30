@@ -259,7 +259,7 @@ class quiz_question_restore_test extends \advanced_testcase {
         // Get the information about the resulting course and check that it is set up correctly.
         $modinfo = get_fast_modinfo($newcourseid);
         $quiz = array_values($modinfo->get_instances_of('quiz'))[0];
-        $quizobj = \mod_quiz\quiz_settings::create($quiz->instance);
+        $quizobj = \quiz::create($quiz->instance);
         $structure = structure::create_for_quiz($quizobj);
 
         // Are the correct slots returned?
@@ -302,7 +302,7 @@ class quiz_question_restore_test extends \advanced_testcase {
         // Get the information about the resulting course and check that it is set up correctly.
         $modinfo = get_fast_modinfo($newcourseid);
         $quiz = array_values($modinfo->get_instances_of('quiz'))[0];
-        $quizobj = \mod_quiz\quiz_settings::create($quiz->instance);
+        $quizobj = \quiz::create($quiz->instance);
         $structure = structure::create_for_quiz($quizobj);
 
         // Are the correct slots returned?
@@ -354,7 +354,7 @@ class quiz_question_restore_test extends \advanced_testcase {
         // Get the information about the resulting course and check that it is set up correctly.
         $modinfo = get_fast_modinfo($newcourseid);
         $quiz = array_values($modinfo->get_instances_of('quiz'))[0];
-        $quizobj = \mod_quiz\quiz_settings::create($quiz->instance);
+        $quizobj = \quiz::create($quiz->instance);
         $structure = \mod_quiz\structure::create_for_quiz($quizobj);
 
         // Count the questions in quiz qbank.
@@ -410,7 +410,7 @@ class quiz_question_restore_test extends \advanced_testcase {
         $quizzes = $modinfo->get_instances_of('quiz');
         $this->assertCount(2, $quizzes);
         foreach ($quizzes as $quiz) {
-            $quizobj = \mod_quiz\quiz_settings::create($quiz->instance);
+            $quizobj = \quiz::create($quiz->instance);
             $structure = structure::create_for_quiz($quizobj);
 
             // Are the correct slots returned?
@@ -472,13 +472,9 @@ class quiz_question_restore_test extends \advanced_testcase {
         quiz_add_quiz_question($matchq->id, $quiz, 3, 1);
         quiz_add_random_questions($quiz, 3, $randomcat->id, 2, false);
 
-        $quizobj = quiz_settings::create($quiz->id, $user1->id);
+        $quizobj = \quiz::create($quiz->id, $user1->id);
         $originalstructure = \mod_quiz\structure::create_for_quiz($quizobj);
-
-        // Set one slot to a non-default display number.
         $originalslots = $originalstructure->get_slots();
-        $firstslot = reset($originalslots);
-        $originalstructure->update_slot_display_number($firstslot->id, rand(5, 10));
 
         // Set one slot to requireprevious.
         $lastslot = end($originalslots);
@@ -492,7 +488,7 @@ class quiz_question_restore_test extends \advanced_testcase {
         $modinfo = get_fast_modinfo($course2);
         $quizzes = $modinfo->get_instances_of('quiz');
         $restoredquiz = reset($quizzes);
-        $restoredquizobj = quiz_settings::create($restoredquiz->instance, $user1->id);
+        $restoredquizobj = \quiz::create($restoredquiz->instance, $user1->id);
         $restoredstructure = \mod_quiz\structure::create_for_quiz($restoredquizobj);
         $restoredslots = array_values($restoredstructure->get_slots());
         $originalstructure = \mod_quiz\structure::create_for_quiz($quizobj);
@@ -503,7 +499,6 @@ class quiz_question_restore_test extends \advanced_testcase {
             $this->assertEquals($restoredslot->quizid, $restoredquiz->instance);
             $this->assertEquals($originalslot->slot, $restoredslot->slot);
             $this->assertEquals($originalslot->page, $restoredslot->page);
-            $this->assertEquals($originalslot->displaynumber, $restoredslot->displaynumber);
             $this->assertEquals($originalslot->requireprevious, $restoredslot->requireprevious);
             $this->assertEquals($originalslot->maxmark, $restoredslot->maxmark);
         }
