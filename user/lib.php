@@ -595,18 +595,10 @@ function user_get_user_details($user, $course = null, array $userfields = array(
  * Tries to obtain user details, either recurring directly to the user's system profile
  * or through one of the user's course enrollments (course profile).
  *
- * You can use the $userfields parameter to reduce the amount of a user record that is required by the method.
- * The minimum user fields are:
- *  * id
- *  * deleted
- *  * all potential fullname fields
- *
  * @param stdClass $user The user.
- * @param array $userfields An array of userfields to be returned, the values must be a
- *                          subset of user_get_default_fields (optional)
  * @return array if unsuccessful or the allowed user details.
  */
-function user_get_user_details_courses($user, array $userfields = []) {
+function user_get_user_details_courses($user) {
     global $USER;
     $userdetails = null;
 
@@ -617,14 +609,14 @@ function user_get_user_details_courses($user, array $userfields = []) {
 
     // Try using system profile.
     if ($systemprofile) {
-        $userdetails = user_get_user_details($user, null, $userfields);
+        $userdetails = user_get_user_details($user, null);
     } else {
         // Try through course profile.
         // Get the courses that the user is enrolled in (only active).
         $courses = enrol_get_users_courses($user->id, true);
         foreach ($courses as $course) {
             if (user_can_view_profile($user, $course)) {
-                $userdetails = user_get_user_details($user, $course, $userfields);
+                $userdetails = user_get_user_details($user, $course);
             }
         }
     }
@@ -1382,27 +1374,3 @@ function user_edit_map_field_purpose($userid, $fieldname) {
     return $purpose;
 }
 
-/**
- * Update the users public key for the specified device and app.
- *
- * @param string $uuid The device UUID.
- * @param string $appid The app id, usually something like com.moodle.moodlemobile.
- * @param string $publickey The app generated public key.
- * @return bool
- * @since Moodle 4.2
- */
-function user_update_device_public_key(string $uuid, string $appid, string $publickey): bool {
-    global $USER, $DB;
-
-    if (!$DB->get_record('user_devices',
-        ['uuid' => $uuid, 'appid' => $appid, 'userid' => $USER->id]
-    )) {
-        return false;
-    }
-
-    $DB->set_field('user_devices', 'publickey', $publickey,
-        ['uuid' => $uuid, 'appid' => $appid, 'userid' => $USER->id]
-    );
-
-    return true;
-}

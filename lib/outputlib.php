@@ -1599,10 +1599,7 @@ class theme_config {
             }
             $candidates[] = $parent_config->extrascsscallback;
         }
-
-        if (isset($this->extrascsscallback)) {
-            $candidates[] = $this->extrascsscallback;
-        }
+        $candidates[] = $this->extrascsscallback;
 
         // Calling the functions.
         foreach ($candidates as $function) {
@@ -1632,10 +1629,7 @@ class theme_config {
             }
             $candidates[] = $parent_config->prescsscallback;
         }
-
-        if (isset($this->prescsscallback)) {
-            $candidates[] = $this->prescsscallback;
-        }
+        $candidates[] = $this->prescsscallback;
 
         // Calling the functions.
         foreach ($candidates as $function) {
@@ -1860,7 +1854,7 @@ class theme_config {
         // Now resolve all theme settings or do any other postprocessing.
         // This needs to be done before calling core parser, since the parser strips [[settings]] tags.
         $csspostprocess = $this->csspostprocess;
-        if ($csspostprocess && function_exists($csspostprocess)) {
+        if (function_exists($csspostprocess)) {
             $css = $csspostprocess($css, $this);
         }
 

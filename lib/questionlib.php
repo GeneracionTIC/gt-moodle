@@ -1991,7 +1991,7 @@ function core_question_find_next_unused_idnumber(?string $oldidnumber, int $cate
     global $DB;
 
     // The the old idnumber is not of the right form, bail now.
-    if ($oldidnumber === null || !preg_match('~\d+$~', $oldidnumber, $matches)) {
+    if (!preg_match('~\d+$~', $oldidnumber, $matches)) {
         return null;
     }
 

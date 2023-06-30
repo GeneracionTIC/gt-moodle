@@ -1,4 +1,4 @@
-@block @block_activity_results @javascript
+@block @block_activity_results
 Feature: The activity results block displays students in groups low scores as scales
   In order to be display student scores as scales
   As a user

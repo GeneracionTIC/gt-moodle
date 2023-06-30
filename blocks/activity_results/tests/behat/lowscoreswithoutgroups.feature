@@ -1,4 +1,4 @@
-@block @block_activity_results @javascript
+@block @block_activity_results
 Feature: The activity results block displays student low scores
   In order to be display student scores
   As a user

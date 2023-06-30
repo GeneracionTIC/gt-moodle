@@ -22,15 +22,13 @@
 		}
 	],
 	"require" : {
-		"php" : ">=7.1.0",
+		"php" : ">=7.0.0",
 		"ext-curl" : "*",
-		"ext-dom"  : "*",
-		"psr/log" : "^1.0 || ^2.0 || ^3.0"
-    },
+		"psr/log" : "^1.0.0"
+	},
 	"require-dev" : {
-		"monolog/monolog" : "^1.0.0 || ^2.0.0",
-		"phpunit/phpunit" : ">=7.5", 
-		"phpstan/phpstan" : "^1.5"
+		"monolog/monolog" : "^1.0.0",
+		"phpunit/phpunit" : ">=4.8.35 <8"
 	},
 	"autoload" : {
 		"classmap" : [
@@ -38,14 +36,12 @@
 		]
 	},
 	"autoload-dev" : {
-		"files": ["source/CAS.php"],
 		"psr-4" : {
 			"PhpCas\\" : "test/CAS/"
 		}
 	},
 	"scripts" : {
-		"test" : "phpunit", 
-		"phpstan" : "phpstan"
+		"test" : "phpunit"
 	},
 	"extra" : {
 		"branch-alias" : {

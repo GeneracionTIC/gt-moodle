@@ -107,12 +107,6 @@ class file_storage {
      * @return string sha1 hash
      */
     public static function get_pathname_hash($contextid, $component, $filearea, $itemid, $filepath, $filename) {
-        if (substr($filepath, 0, 1) != '/') {
-            $filepath = '/' . $filepath;
-        }
-        if (substr($filepath, - 1) != '/') {
-            $filepath .= '/';
-        }
         return sha1("/$contextid/$component/$filearea/$itemid".$filepath.$filename);
     }
 
@@ -1806,7 +1800,7 @@ class file_storage {
                 // the latter of which can go to 100, we need to make sure that quality here is
                 // in a safe range or PHP WILL CRASH AND DIE. You have been warned.
                 $quality = $quality > 9 ? (int)(max(1.0, (float)$quality / 100.0) * 9.0) : $quality;
-                imagepng($img, null, $quality, PNG_NO_FILTER);
+                imagepng($img, NULL, $quality, NULL);
                 break;
 
             default:
@@ -2468,6 +2462,6 @@ class file_storage {
      * @return  string The file's content hash
      */
     public static function hash_from_string($content) {
-        return sha1($content ?? '');
+        return sha1($content);
     }
 }

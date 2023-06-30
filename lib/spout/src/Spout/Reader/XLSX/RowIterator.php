@@ -139,7 +139,7 @@ class RowIterator implements IteratorInterface
      * @throws \Box\Spout\Common\Exception\IOException If the sheet data XML cannot be read
      * @return void
      */
-    public function rewind() : void
+    public function rewind()
     {
         $this->xmlReader->close();
 
@@ -163,7 +163,7 @@ class RowIterator implements IteratorInterface
      *
      * @return bool
      */
-    public function valid() : bool
+    public function valid()
     {
         return (!$this->hasReachedEndOfFile);
     }
@@ -176,7 +176,7 @@ class RowIterator implements IteratorInterface
      * @throws \Box\Spout\Common\Exception\IOException If unable to read the sheet data XML
      * @return void
      */
-    public function next() : void
+    public function next()
     {
         $this->nextRowIndexToBeProcessed++;
 
@@ -374,7 +374,7 @@ class RowIterator implements IteratorInterface
      *
      * @return Row|null
      */
-    public function current() : ?Row
+    public function current()
     {
         $rowToBeProcessed = $this->rowBuffer;
 
@@ -399,7 +399,7 @@ class RowIterator implements IteratorInterface
      *
      * @return int
      */
-    public function key() : int
+    public function key()
     {
         // TODO: This should return $this->nextRowIndexToBeProcessed
         //       but to avoid a breaking change, the return value for
@@ -414,7 +414,7 @@ class RowIterator implements IteratorInterface
      *
      * @return void
      */
-    public function end() : void
+    public function end()
     {
         $this->xmlReader->close();
     }

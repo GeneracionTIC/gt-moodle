@@ -94,7 +94,7 @@ Options:
 Example from Moodle root directory:
 \$ php admin/tool/behat/cli/util.php --enable --parallel=4
 
-More info in https://moodledev.io/general/development/tools/behat/running
+More info in http://docs.moodle.org/dev/Acceptance_testing#Running_tests
 ";
 
 if (!empty($options['help'])) {
@@ -355,7 +355,7 @@ function print_combined_drop_output($processes) {
                 $op = $process->getIncrementalOutput();
                 if (trim($op)) {
                     $update = preg_filter('#^\s*([FS\.\-]+)(?:\s+\d+)?\s*$#', '$1', $op);
-                    $strlentoprint = $update ? strlen($update) : 0;
+                    $strlentoprint = strlen($update);
 
                     // If not enough dots printed on line then just print.
                     if ($strlentoprint < $remainingprintlen) {

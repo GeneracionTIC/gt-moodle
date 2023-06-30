@@ -18,6 +18,7 @@ $thin-scroll-bg-hover: $gray-700 !default;
 $font-size-xs: ($font-size-base * .75) !default;
 
 #region-main {
+    overflow-x: auto;
     overflow-y: visible;
     background-color: $body-bg;
 }
@@ -1520,7 +1521,7 @@ body#page-lib-editor-tinymce-plugins-moodlemedia-preview {
 .choosercontainer #chooseform .option label {
     display: block;
     margin: 0;
-    padding: ($spacer * 0.5) 0;
+    padding: ($spacer / 2) 0;
     border-bottom: 1px solid #fff;
 }
 
@@ -2170,14 +2171,6 @@ h3.sectionname .inplaceeditable.inplaceeditingon .editinstructions {
 
 /** Chart area. */
 .chart-area {
-    @include media-breakpoint-up(lg) {
-        .chart-image {
-            position: relative;
-            margin: auto;
-            height: 48vh;
-            width: 46vw;
-        }
-    }
 
     .chart-table-data {
         display: none;
@@ -2281,7 +2274,7 @@ h3.sectionname .inplaceeditable.inplaceeditingon .editinstructions {
     padding-right: 0;
     padding-left: 0;
     .nav {
-        margin-right: $grid-gutter-width * 0.5;
+        margin-right: $grid-gutter-width / 2;
         background-color: $card-bg;
     }
     @include media-breakpoint-down(sm) {
@@ -2320,10 +2313,6 @@ $footer-link-color: $bg-inverse-link-color !default;
     @include box-shadow($popover-box-shadow);
 }
 
-.hasstickyfooter .btn-footer-popover {
-    bottom: calc(2rem + #{$navbar-height});
-}
-
 .popover.footer {
     .popover-body {
         padding: 0;
@@ -2340,10 +2329,6 @@ $footer-link-color: $bg-inverse-link-color !default;
             }
         }
     }
-}
-
-.footer-support-link {
-    padding-bottom: 5px;
 }
 
 @include media-breakpoint-up(sm) {
@@ -2377,7 +2362,6 @@ $footer-link-color: $bg-inverse-link-color !default;
         width: 100%;
         color: $body-color;
     }
-    &.active,
     &:active,
     &:hover,
     &:focus,
@@ -2389,14 +2373,13 @@ $footer-link-color: $bg-inverse-link-color !default;
             color: $dropdown-link-active-color;
         }
     }
-    &[aria-current="true"],
-    &[aria-selected="true"] {
+    &[aria-current="true"] {
         position: relative;
         display: flex;
         align-items: center;
         &:before {
             @include fa-icon();
-            content: $fa-var-check;
+            content: $fa-var-circle;
             position: absolute;
             left: 0.4rem;
             font-size: 0.7rem;
@@ -2618,7 +2601,7 @@ $picker-emojis-per-row: 7 !default;
     .category-button {
         padding: .375rem 0;
         height: 100%;
-        width: divide($picker-width, $picker-emoji-category-count);
+        width: $picker-width / $picker-emoji-category-count;
         border-top: none;
         border-left: none;
         border-right: none;
@@ -2662,7 +2645,7 @@ $picker-emojis-per-row: 7 !default;
     }
 
     .emoji-short-name {
-        line-height: $picker-row-height * 0.5;
+        line-height: $picker-row-height / 2;
     }
 
     @include media-breakpoint-down(xs) {
@@ -2724,10 +2707,10 @@ $picker-emojis-per-row: 7 !default;
     .breadcrumb:not(:empty) {
         width: 100%;
         flex-wrap: nowrap;
-        margin-bottom: $spacer * 0.5;
+        margin-bottom: $spacer / 2;
         .breadcrumb-item {
-            padding-top: $spacer * 0.33333;
-            padding-bottom: $spacer * 0.33333;
+            padding-top: $spacer / 3;
+            padding-bottom: $spacer / 3;
             display: inline-flex;
             overflow: hidden;
         }
@@ -2752,7 +2735,7 @@ $picker-emojis-per-row: 7 !default;
         max-width: 100%;
     }
     .card .card-body {
-        padding: $card-spacer-x * 0.5;
+        padding: $card-spacer-x / 2;
     }
     #page-header {
         .card {
@@ -2766,7 +2749,7 @@ $picker-emojis-per-row: 7 !default;
     .nav-pills {
         margin: 0;
         border: 0;
-        padding: $spacer * 0.125;
+        padding: $spacer / 8;
         background-color: $gray-200;
         .nav-item {
             flex: 1 1 auto;
@@ -2775,7 +2758,7 @@ $picker-emojis-per-row: 7 !default;
         .nav-link {
             background: $white;
             border: 0;
-            margin: $spacer * 0.125;
+            margin: $spacer / 8;
             &.active {
                 @include button-outline-variant($gray-600);
                 border-color: $gray-600;
@@ -2975,35 +2958,6 @@ body.dragging {
     content: $fa-var-chevron-up;
 }
 
-.select-menu {
-    li:first-child {
-        ul[role="group"] {
-            padding: 0;
-        }
-    }
-
-    ul[role="group"] {
-        padding: 0.3rem 0 0 0;
-        margin: 0;
-        li:first-child {
-            cursor: default;
-            color: $gray-600;
-            padding: 0.25rem 1.5rem;
-            display: block;
-        }
-        .dropdown-item {
-            padding-left: 2.5rem;
-        }
-    }
-    .dropdown-item {
-        cursor: pointer;
-
-        &[aria-selected="true"] {
-            font-weight: bold;
-        }
-    }
-}
-
 .initialbargroups ul {
     -webkit-margin-start: 0; /* stylelint-disable-line */
     margin-right: -1px;
@@ -3058,5 +3012,4 @@ blockquote {
         overflow-wrap: anywhere;
         white-space: normal;
     }
-
 }

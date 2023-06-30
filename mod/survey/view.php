@@ -28,13 +28,13 @@ require_once("lib.php");
 $id = required_param('id', PARAM_INT);    // Course Module ID.
 
 if (! $cm = get_coursemodule_from_id('survey', $id)) {
-    throw new \moodle_exception('invalidcoursemodule');
+    print_error('invalidcoursemodule');
 }
 
 $cm = cm_info::create($cm);
 
 if (! $course = $DB->get_record("course", array("id" => $cm->course))) {
-    throw new \moodle_exception('coursemisconf');
+    print_error('coursemisconf');
 }
 
 $PAGE->set_url('/mod/survey/view.php', array('id' => $id));
@@ -44,11 +44,11 @@ $context = context_module::instance($cm->id);
 require_capability('mod/survey:participate', $context);
 
 if (! $survey = $DB->get_record("survey", array("id" => $cm->instance))) {
-    throw new \moodle_exception('invalidsurveyid', 'survey');
+    print_error('invalidsurveyid', 'survey');
 }
 
 if (! $template = $DB->get_record("survey", array("id" => $survey->template))) {
-    throw new \moodle_exception('invalidtmptid', 'survey');
+    print_error('invalidtmptid', 'survey');
 }
 
 $showscales = ($template->name != 'ciqname');

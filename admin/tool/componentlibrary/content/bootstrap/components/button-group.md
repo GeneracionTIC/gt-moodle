@@ -123,10 +123,10 @@ Place a `.btn-group` within another `.btn-group` when you want dropdown menus mi
   <button type="button" class="btn btn-secondary">2</button>
 
   <div class="btn-group" role="group">
-    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Dropdown
     </button>
-    <div class="dropdown-menu">
+    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
       <a class="dropdown-item" href="#">Dropdown link</a>
       <a class="dropdown-item" href="#">Dropdown link</a>
     </div>
@@ -155,10 +155,10 @@ Make a set of buttons appear vertically stacked rather than horizontally. **Spli
     <button type="button" class="btn btn-secondary">Button</button>
     <button type="button" class="btn btn-secondary">Button</button>
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      <button id="btnGroupVerticalDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Dropdown
       </button>
-      <div class="dropdown-menu">
+      <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
         <a class="dropdown-item" href="#">Dropdown link</a>
         <a class="dropdown-item" href="#">Dropdown link</a>
       </div>
@@ -166,28 +166,28 @@ Make a set of buttons appear vertically stacked rather than horizontally. **Spli
     <button type="button" class="btn btn-secondary">Button</button>
     <button type="button" class="btn btn-secondary">Button</button>
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      <button id="btnGroupVerticalDrop2" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Dropdown
       </button>
-      <div class="dropdown-menu">
+      <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop2">
         <a class="dropdown-item" href="#">Dropdown link</a>
         <a class="dropdown-item" href="#">Dropdown link</a>
       </div>
     </div>
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      <button id="btnGroupVerticalDrop3" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Dropdown
       </button>
-      <div class="dropdown-menu">
+      <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop3">
         <a class="dropdown-item" href="#">Dropdown link</a>
         <a class="dropdown-item" href="#">Dropdown link</a>
       </div>
     </div>
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      <button id="btnGroupVerticalDrop4" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Dropdown
       </button>
-      <div class="dropdown-menu">
+      <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop4">
         <a class="dropdown-item" href="#">Dropdown link</a>
         <a class="dropdown-item" href="#">Dropdown link</a>
       </div>

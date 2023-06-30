@@ -91,18 +91,13 @@ define('URL_MATCH_EXACT', 2);
  * @return string
  */
 function s($var) {
+
     if ($var === false) {
         return '0';
     }
 
-    if ($var === null || $var === '') {
-        return '';
-    }
-
-    return preg_replace(
-        '/&amp;#(\d+|x[0-9a-f]+);/i', '&#$1;',
-        htmlspecialchars($var, ENT_QUOTES | ENT_HTML401 | ENT_SUBSTITUTE)
-    );
+    return preg_replace('/&amp;#(\d+|x[0-9a-f]+);/i', '&#$1;',
+            htmlspecialchars($var, ENT_QUOTES | ENT_HTML401 | ENT_SUBSTITUTE));
 }
 
 /**
@@ -153,9 +148,6 @@ function addslashes_js($var) {
  * @return string The remaining URL.
  */
 function strip_querystring($url) {
-    if ($url === null || $url === '') {
-        return '';
-    }
 
     if ($commapos = strpos($url, '?')) {
         return substr($url, 0, $commapos);
@@ -344,7 +336,6 @@ class moodle_url {
             $this->anchor = $url->anchor;
 
         } else {
-            $url = $url ?? '';
             // Detect if anchor used.
             $apos = strpos($url, '#');
             if ($apos !== false) {
@@ -1145,7 +1136,7 @@ function validate_email($address) {
 
     require_once("{$CFG->libdir}/phpmailer/moodle_phpmailer.php");
 
-    return moodle_phpmailer::validateAddress($address ?? '') && !preg_match('/[<>]/', $address);
+    return moodle_phpmailer::validateAddress($address) && !preg_match('/[<>]/', $address);
 }
 
 /**
@@ -1480,11 +1471,6 @@ function reset_text_filters_cache($phpunitreset = false) {
 function format_string($string, $striplinks = true, $options = null) {
     global $CFG, $PAGE;
 
-    if ($string === '' || is_null($string)) {
-        // No need to do any filters and cleaning.
-        return '';
-    }
-
     // We'll use a in-memory cache here to speed up repeated strings.
     static $strcache = false;
 
@@ -1574,7 +1560,7 @@ function format_string($string, $striplinks = true, $options = null) {
  * @return string
  */
 function replace_ampersands_not_followed_by_entity($string) {
-    return preg_replace("/\&(?![a-zA-Z0-9#]{1,8};)/", "&amp;", $string ?? '');
+    return preg_replace("/\&(?![a-zA-Z0-9#]{1,8};)/", "&amp;", $string);
 }
 
 /**
@@ -1877,7 +1863,7 @@ function purify_html($text, $options = array()) {
         $config = HTMLPurifier_Config::createDefault();
 
         $config->set('HTML.DefinitionID', 'moodlehtml');
-        $config->set('HTML.DefinitionRev', 7);
+        $config->set('HTML.DefinitionRev', 6);
         $config->set('Cache.SerializerPath', $cachedir);
         $config->set('Cache.SerializerPermissions', $CFG->directorypermissions);
         $config->set('Core.NormalizeNewlines', false);
@@ -1919,7 +1905,7 @@ function purify_html($text, $options = array()) {
 
             // Media elements.
             // https://html.spec.whatwg.org/#the-video-element
-            $def->addElement('video', 'Inline', 'Optional: #PCDATA | Flow | source | track', 'Common', [
+            $def->addElement('video', 'Block', 'Optional: #PCDATA | Flow | source | track', 'Common', [
                 'src' => 'URI',
                 'crossorigin' => 'Enum#anonymous,use-credentials',
                 'poster' => 'URI',
@@ -1933,7 +1919,7 @@ function purify_html($text, $options = array()) {
                 'height' => 'Length',
             ]);
             // https://html.spec.whatwg.org/#the-audio-element
-            $def->addElement('audio', 'Inline', 'Optional: #PCDATA | Flow | source | track', 'Common', [
+            $def->addElement('audio', 'Block', 'Optional: #PCDATA | Flow | source | track', 'Common', [
                 'src' => 'URI',
                 'crossorigin' => 'Enum#anonymous,use-credentials',
                 'preload' => 'Enum#auto,metadata,none',
@@ -2262,24 +2248,6 @@ function highlightfast($needle, $haystack) {
 }
 
 /**
- * Converts a language code to hyphen-separated format in accordance to the
- * {@link https://datatracker.ietf.org/doc/html/rfc5646#section-2.1 BCP47 syntax}.
- *
- * For additional information, check out
- * {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/lang MDN web docs - lang}.
- *
- * @param string $langcode The language code to convert.
- * @return string
- */
-function get_html_lang_attribute_value(string $langcode): string {
-    if (empty(trim($langcode))) {
-        // If the language code passed is an empty string, return 'unknown'.
-        return 'unknown';
-    }
-    return str_replace('_', '-', $langcode);
-}
-
-/**
  * Return a string containing 'lang', xml:lang and optionally 'dir' HTML attributes.
  *
  * Internationalisation, for print_header and backup/restorelib.
@@ -2308,7 +2276,7 @@ function get_html_lang($dir = false) {
     }
 
     // Accessibility: added the 'lang' attribute to $direction, used in theme <html> tag.
-    $language = get_html_lang_attribute_value($currentlang);
+    $language = str_replace('_', '-', $currentlang);
     @header('Content-Language: '.$language);
     return ($direction.' lang="'.$language.'" xml:lang="'.$language.'"');
 }
@@ -3494,7 +3462,7 @@ class html_progress_trace extends progress_trace {
      * @return void Output is echo'd
      */
     public function output($message, $depth = 0) {
-        echo '<p>', str_repeat('&#160;&#160;', $depth), htmlspecialchars($message, ENT_COMPAT), "</p>\n";
+        echo '<p>', str_repeat('&#160;&#160;', $depth), htmlspecialchars($message), "</p>\n";
         flush();
     }
 }
@@ -3535,7 +3503,7 @@ class html_list_progress_trace extends progress_trace {
         if ($samedepth) {
             echo "</li>\n<li>";
         }
-        echo htmlspecialchars($message, ENT_COMPAT);
+        echo htmlspecialchars($message);
         flush();
     }
 

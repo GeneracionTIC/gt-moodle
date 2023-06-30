@@ -985,11 +985,10 @@ class sqlsrv_native_moodle_database extends moodle_database {
         $results = array();
 
         foreach ($rs as $row) {
-            $rowarray = (array)$row;
-            $id = reset($rowarray);
+            $id = reset($row);
 
             if (isset($results[$id])) {
-                $colname = key($rowarray);
+                $colname = key($row);
                 debugging("Did you remember to make the first column something unique in your call to get_records? Duplicate value '$id' found in column '$colname'.", DEBUG_DEVELOPER);
             }
             $results[$id] = (object)$row;
@@ -1014,8 +1013,7 @@ class sqlsrv_native_moodle_database extends moodle_database {
         $results = array ();
 
         foreach ($rs as $row) {
-            $rowarray = (array)$row;
-            $results[] = reset($rowarray);
+            $results[] = reset($row);
         }
         $rs->close();
 

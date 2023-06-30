@@ -20,8 +20,8 @@ namespace core_reportbuilder\external;
 
 use renderer_base;
 use core\external\exporter;
-use core_reportbuilder\datasource;
-use core_reportbuilder\local\report\filter;
+use core_reportbuilder\local\report\base;
+use core_reportbuilder\local\models\filter;
 use core_reportbuilder\output\filter_heading_editable;
 
 /**
@@ -40,7 +40,7 @@ class custom_report_filters_exporter extends exporter {
      */
     protected static function define_related(): array {
         return [
-            'report' => datasource::class,
+            'report' => base::class,
         ];
     }
 
@@ -53,6 +53,7 @@ class custom_report_filters_exporter extends exporter {
         return [
             'hasavailablefilters' => [
                 'type' => PARAM_BOOL,
+                'optional' => true,
             ],
             'availablefilters' => [
                 'type' => [
@@ -70,9 +71,11 @@ class custom_report_filters_exporter extends exporter {
                     ],
                 ],
                 'multiple' => true,
+                'optional' => true
             ],
             'hasactivefilters' => [
                 'type' => PARAM_BOOL,
+                'optional' => true,
             ],
             'activefilters' => [
                 'type' => [
@@ -84,9 +87,11 @@ class custom_report_filters_exporter extends exporter {
                     'entityname' => ['type' => PARAM_TEXT],
                 ],
                 'multiple' => true,
+                'optional' => true
             ],
             'helpicon' => [
                 'type' => PARAM_RAW,
+                'optional' => true,
             ],
         ];
     }
@@ -98,13 +103,13 @@ class custom_report_filters_exporter extends exporter {
      * @return array
      */
     protected function get_other_values(renderer_base $output): array {
-        /** @var datasource $report */
+        /** @var base $report */
         $report = $this->related['report'];
 
-        // Current filter instances contained in the report.
-        $filters = $report->get_active_filters();
+        // Current filters added to the report.
+        $filters = filter::get_filter_records($report->get_report_persistent()->get('id'), 'filterorder');
         $filteridentifiers = array_map(static function(filter $filter): string {
-            return $filter->get_unique_identifier();
+            return $filter->get('uniqueidentifier');
         }, $filters);
 
         $availablefilters = $activefilters = [];
@@ -133,19 +138,22 @@ class custom_report_filters_exporter extends exporter {
 
         // Populate active filters.
         $filterinstances = $report->get_filter_instances();
-        foreach ($filterinstances as $filterinstance) {
-            $persistent = $filterinstance->get_filter_persistent();
+        foreach ($filters as $filter) {
+            $filterinstance = $filterinstances[$filter->get('uniqueidentifier')] ?? null;
+            if ($filterinstance === null) {
+                continue;
+            }
 
             $entityname = $filterinstance->get_entity_name();
             $displayvalue = $filterinstance->get_header();
-            $editable = new filter_heading_editable(0, $persistent);
+            $editable = new filter_heading_editable($filter->get('id'));
 
             $activefilters[] = [
-                'id' => $persistent->get('id'),
+                'id' => $filter->get('id'),
                 'entityname' => $report->get_entity_title($entityname)->out(),
                 'heading' => $displayvalue,
                 'headingeditable' => $editable->render($output),
-                'sortorder' => $persistent->get('filterorder'),
+                'sortorder' => $filter->get('filterorder'),
                 'movetitle' => get_string('movefilter', 'core_reportbuilder', $displayvalue),
             ];
         }

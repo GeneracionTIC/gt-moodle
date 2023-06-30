@@ -1,4 +1,4 @@
-@core @core_completion @javascript
+@core @core_completion
 Feature: Students will be marked as completed if they have achieved a passing grade.
 
   Background:

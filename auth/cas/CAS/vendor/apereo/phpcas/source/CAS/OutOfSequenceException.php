@@ -18,7 +18,7 @@
  * limitations under the License.
  *
  *
- * PHP Version 7
+ * PHP Version 5
  *
  * @file     CAS/OutOfSequenceException.php
  * @category Authentication

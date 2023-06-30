@@ -300,7 +300,7 @@ switch ($action) {
 
     case "question":
         if (!$question = $DB->get_record("survey_questions", array("id" => $qid))) {
-            throw new \moodle_exception('cannotfindquestion', 'survey');
+            print_error('cannotfindquestion', 'survey');
         }
         $question->text = get_string($question->text, "survey");
 

@@ -1998,7 +1998,6 @@ class questionlib_test extends \advanced_testcase {
      */
     public function find_next_unused_idnumber_cases(): array {
         return [
-            [null, null],
             ['id', null],
             ['id1a', null],
             ['id001', 'id002'],
@@ -2021,10 +2020,10 @@ class questionlib_test extends \advanced_testcase {
      * Test core_question_find_next_unused_idnumber in the case when there are no other questions.
      *
      * @dataProvider find_next_unused_idnumber_cases
-     * @param string|null $oldidnumber value to pass to core_question_find_next_unused_idnumber.
+     * @param string $oldidnumber value to pass to core_question_find_next_unused_idnumber.
      * @param string|null $expectednewidnumber expected result.
      */
-    public function test_core_question_find_next_unused_idnumber(?string $oldidnumber, ?string $expectednewidnumber) {
+    public function test_core_question_find_next_unused_idnumber(string $oldidnumber, ?string $expectednewidnumber) {
         $this->assertSame($expectednewidnumber, core_question_find_next_unused_idnumber($oldidnumber, 0));
     }
 

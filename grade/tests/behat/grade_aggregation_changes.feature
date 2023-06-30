@@ -1,4 +1,4 @@
-@core @core_grades @javascript
+@core @core_grades
 Feature: Changing the aggregation of an item affects its weight and extra credit definition
   In order to switch to another aggregation method
   As an teacher
@@ -332,6 +332,7 @@ Feature: Changing the aggregation of an item affects its weight and extra credit
     And the field "Extra credit" matches value "0"
     And I press "Cancel"
 
+  @javascript
   Scenario: Switching grade items between categories
     # Move to same aggregation (Natural).
     Given I navigate to "Setup > Gradebook setup" in the course gradebook

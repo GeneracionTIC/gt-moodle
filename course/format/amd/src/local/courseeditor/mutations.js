@@ -131,51 +131,6 @@ export default class {
     }
 
     /**
-     * Hides sections.
-     * @param {StateManager} stateManager the current state manager
-     * @param {array} sectionIds the list of section ids
-     */
-    async sectionHide(stateManager, sectionIds) {
-        await this._sectionBasicAction(stateManager, 'section_hide', sectionIds);
-    }
-
-    /**
-     * Show sections.
-     * @param {StateManager} stateManager the current state manager
-     * @param {array} sectionIds the list of section ids
-     */
-    async sectionShow(stateManager, sectionIds) {
-        await this._sectionBasicAction(stateManager, 'section_show', sectionIds);
-    }
-
-    /**
-     * Show cms.
-     * @param {StateManager} stateManager the current state manager
-     * @param {array} cmIds the list of cm ids
-     */
-    async cmShow(stateManager, cmIds) {
-        await this._cmBasicAction(stateManager, 'cm_show', cmIds);
-    }
-
-    /**
-     * Hide cms.
-     * @param {StateManager} stateManager the current state manager
-     * @param {array} cmIds the list of cm ids
-     */
-    async cmHide(stateManager, cmIds) {
-        await this._cmBasicAction(stateManager, 'cm_hide', cmIds);
-    }
-
-    /**
-     * Stealth cms.
-     * @param {StateManager} stateManager the current state manager
-     * @param {array} cmIds the list of cm ids
-     */
-    async cmStealth(stateManager, cmIds) {
-        await this._cmBasicAction(stateManager, 'cm_stealth', cmIds);
-    }
-
-    /**
      * Move course modules to specific course location.
      *
      * Note that one of targetSectionId or targetCmId should be provided in order to identify the

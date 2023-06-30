@@ -985,7 +985,7 @@ abstract class base implements \IteratorAggregate {
      *
      * @return \ArrayIterator
      */
-    public function getIterator(): \Traversable {
+    public function getIterator() {
         return new \ArrayIterator($this->data);
     }
 

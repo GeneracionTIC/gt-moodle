@@ -123,7 +123,7 @@ class assign_override_form extends moodleform {
                 if (empty($groups)) {
                     // Generate an error.
                     $link = new moodle_url('/mod/assign/overrides.php', array('cmid' => $cm->id));
-                    throw new \moodle_exception('groupsnone', 'assign', $link);
+                    print_error('groupsnone', 'assign', $link);
                 }
 
                 $groupchoices = array();
@@ -183,7 +183,7 @@ class assign_override_form extends moodleform {
                 if (empty($users)) {
                     // Generate an error.
                     $link = new moodle_url('/mod/assign/overrides.php', array('cmid' => $cm->id));
-                    throw new \moodle_exception('usersnone', 'assign', $link);
+                    print_error('usersnone', 'assign', $link);
                 }
 
                 $userchoices = array();
@@ -324,8 +324,8 @@ class assign_override_form extends moodleform {
         }
 
         if (!empty($data['allowsubmissionsfromdate']) && !empty($data['duedate'])) {
-            if ($data['duedate'] <= $data['allowsubmissionsfromdate']) {
-                $errors['duedate'] = get_string('duedateaftersubmissionvalidation', 'assign');
+            if ($data['duedate'] < $data['allowsubmissionsfromdate']) {
+                $errors['duedate'] = get_string('duedatevalidation', 'assign');
             }
         }
 

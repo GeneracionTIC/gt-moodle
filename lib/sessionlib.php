@@ -82,7 +82,7 @@ function confirm_sesskey($sesskey=NULL) {
  */
 function require_sesskey() {
     if (!confirm_sesskey()) {
-        throw new \moodle_exception('invalidsesskey');
+        print_error('invalidsesskey');
     }
 }
 

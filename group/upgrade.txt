@@ -1,7 +1,7 @@
 This files describes API changes in /group/*,
 information provided here is intended especially for developers.
 
-=== 4.1.4 ===
+=== 4.0.9 ===
 * The following external methods now return group names correctly formatted:
   - `core_group_get_groups`
   - `core_group_get_course_groups`

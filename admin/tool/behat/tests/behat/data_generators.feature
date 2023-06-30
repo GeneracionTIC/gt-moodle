@@ -1,4 +1,4 @@
-@tool @tool_behat @javascript
+@tool @tool_behat
 Feature: Set up contextual data for tests
   In order to write tests quickly
   As a developer
@@ -14,6 +14,7 @@ Feature: Set up contextual data for tests
     When I log in as "testuser2"
     Then I should see "TestFirstname"
 
+  @javascript
   Scenario: Add a bunch of courses and categories
     Given the following "categories" exist:
       | name | category | idnumber |
@@ -42,6 +43,7 @@ Feature: Set up contextual data for tests
     And I follow "Category 1"
     And I should see "Course 3"
 
+  @javascript
   Scenario: Add a bunch of groups and groupings
     Given the following "courses" exist:
       | fullname | shortname |
@@ -62,6 +64,7 @@ Feature: Set up contextual data for tests
     And I should see "Grouping 1"
     And I should see "Grouping 2"
 
+  @javascript
   Scenario: Role overrides
     Given the following "users" exist:
       | username | firstname | lastname | email |
@@ -221,6 +224,7 @@ Feature: Set up contextual data for tests
     And I follow "Settings"
     And the field "Type" matches value "Scale"
 
+  @javascript
   Scenario: Add relations between users and groups
     Given the following "users" exist:
       | username | firstname | lastname | email |
@@ -280,16 +284,16 @@ Feature: Set up contextual data for tests
       | student1 | CHC    |
     When I log in as "admin"
     And I navigate to "Users > Accounts > Cohorts" in site administration
-    Then the following should exist in the "reportbuilder-table" table:
+    Then the following should exist in the "cohorts" table:
       | Name            | Cohort size |
       | System cohort A | 1           |
       | System cohort B | 2           |
     And I should not see "Cohort in category"
     And I am on course index
     And I follow "Cat 1"
-    And I navigate to "Cohorts" in current page administration
+    And I follow "Cohorts"
     And I should not see "System cohort"
-    And the following should exist in the "reportbuilder-table" table:
+    And the following should exist in the "cohorts" table:
       | Name               | Cohort size |
       | Cohort in category | 1           |
       | Empty cohort       | 0           |
@@ -331,22 +335,19 @@ Feature: Set up contextual data for tests
     And I am on "Course 1" course homepage
     And I navigate to "Setup > Gradebook setup" in the course gradebook
     Then I should see "Test Grade Item 1"
-    And I open the action menu in "Test Grade Item 1" "table_row"
-    And I choose "Edit" in the open action menu
+    And I follow "Edit   Test Grade Item 1"
     And I expand all fieldsets
     And I should see "Course 1"
     And I press "Cancel"
     And I should see "Grade category 1"
     And I should see "Test Grade Item 2"
-    And I open the action menu in "Test Grade Item 2" "table_row"
-    And I choose "Edit" in the open action menu
+    And I follow "Edit   Test Grade Item 2"
     And I expand all fieldsets
     And I should see "Grade category 1"
     And I press "Cancel"
     And I should see "Grade sub category 2"
     And I should see "Test Grade Item 3"
-    And I open the action menu in "Test Grade Item 3" "table_row"
-    And I choose "Edit" in the open action menu
+    And I follow "Edit   Test Grade Item 3"
     And I expand all fieldsets
     And I should see "Grade sub category 2"
     And I press "Cancel"
@@ -411,8 +412,7 @@ Feature: Set up contextual data for tests
     And I am on "Course 1" course homepage
     And I navigate to "Setup > Gradebook setup" in the course gradebook
     Then I should see "Test Outcome Grade Item 1"
-    And I open the action menu in "Test Outcome Grade Item 1" "table_row"
-    And I choose "Edit" in the open action menu
+    And I follow "Edit   Test Outcome Grade Item 1"
     And the field "Outcome" matches value "Grade outcome 1"
     And I expand all fieldsets
     And I should see "Grade category 1" in the "Grade category" "form_row"

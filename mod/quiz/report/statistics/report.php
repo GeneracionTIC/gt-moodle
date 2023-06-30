@@ -208,7 +208,7 @@ class quiz_statistics_report extends quiz_default_report {
         } else if ($qid) {
             // Report on an individual sub-question indexed questionid.
             if (!$questionstats->has_subq($qid, $variantno)) {
-                throw new \moodle_exception('questiondoesnotexist', 'question');
+                print_error('questiondoesnotexist', 'question');
             }
 
             $this->output_individual_question_data($quiz, $questionstats->for_subq($qid, $variantno));
@@ -225,7 +225,7 @@ class quiz_statistics_report extends quiz_default_report {
         } else if ($slot) {
             // Report on an individual question indexed by position.
             if (!isset($questions[$slot])) {
-                throw new \moodle_exception('questiondoesnotexist', 'question');
+                print_error('questiondoesnotexist', 'question');
             }
 
             if ($variantno === null &&

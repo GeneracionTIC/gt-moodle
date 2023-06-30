@@ -89,7 +89,7 @@ Options:
 Example from Moodle root directory:
 \$ php admin/tool/behat/cli/util_single_run.php --enable
 
-More info in https://moodledev.io/general/development/tools/behat/running
+More info in http://docs.moodle.org/dev/Acceptance_testing#Running_tests
 ";
 
 if (!empty($options['help'])) {

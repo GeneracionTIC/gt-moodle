@@ -70,11 +70,6 @@ function add_moduleinfo($moduleinfo, $course, $mform = null) {
     if (isset($moduleinfo->downloadcontent)) {
         $newcm->downloadcontent = $moduleinfo->downloadcontent;
     }
-    if (has_capability('moodle/course:setforcedlanguage', context_course::instance($course->id))) {
-        $newcm->lang = $moduleinfo->lang ?? null;
-    } else {
-        $newcm->lang = null;
-    }
     $newcm->groupmode        = $moduleinfo->groupmode;
     $newcm->groupingid       = $moduleinfo->groupingid;
     $completion = new completion_info($course);
@@ -121,7 +116,7 @@ function add_moduleinfo($moduleinfo, $course, $mform = null) {
     $transaction = $DB->start_delegated_transaction();
 
     if (!$moduleinfo->coursemodule = add_course_module($newcm)) {
-        throw new \moodle_exception('cannotaddcoursemodule');
+        print_error('cannotaddcoursemodule');
     }
 
     if (plugin_supports('mod', $moduleinfo->modulename, FEATURE_MOD_INTRO, true) &&
@@ -147,10 +142,9 @@ function add_moduleinfo($moduleinfo, $course, $mform = null) {
         if ($returnfromfunc instanceof moodle_exception) {
             throw $returnfromfunc;
         } else if (!is_number($returnfromfunc)) {
-            throw new \moodle_exception('invalidfunction', '', course_get_url($course, $moduleinfo->section));
+            print_error('invalidfunction', '', course_get_url($course, $moduleinfo->section));
         } else {
-            throw new \moodle_exception('cannotaddnewmodule', '', course_get_url($course, $moduleinfo->section),
-                $moduleinfo->modulename);
+            print_error('cannotaddnewmodule', '', course_get_url($course, $moduleinfo->section), $moduleinfo->modulename);
         }
     }
 
@@ -499,7 +493,7 @@ function can_add_moduleinfo($course, $modulename, $section) {
     $cw = get_fast_modinfo($course)->get_section_info($section);
 
     if (!course_allowed_module($course, $module->name)) {
-        throw new \moodle_exception('moduledisable');
+        print_error('moduledisable');
     }
 
     return array($module, $context, $cw);
@@ -556,13 +550,6 @@ function update_moduleinfo($cm, $moduleinfo, $course, $mform = null) {
 
     $moduleinfo->course = $course->id;
     $moduleinfo = set_moduleinfo_defaults($moduleinfo);
-
-    $modcontext = context_module::instance($moduleinfo->coursemodule);
-    if (has_capability('moodle/course:setforcedlanguage', $modcontext)) {
-        $cm->lang = $moduleinfo->lang ?? null;
-    } else {
-        unset($cm->lang);
-    }
 
     if (!empty($course->groupmodeforce) or !isset($moduleinfo->groupmode)) {
         $moduleinfo->groupmode = $cm->groupmode; // Keep original.
@@ -623,6 +610,8 @@ function update_moduleinfo($cm, $moduleinfo, $course, $mform = null) {
 
     $DB->update_record('course_modules', $cm);
 
+    $modcontext = context_module::instance($moduleinfo->coursemodule);
+
     // Update embedded links and save files.
     if (plugin_supports('mod', $moduleinfo->modulename, FEATURE_MOD_INTRO, true)) {
         $moduleinfo->intro = file_save_draft_area_files($moduleinfo->introeditor['itemid'], $modcontext->id,
@@ -645,7 +634,7 @@ function update_moduleinfo($cm, $moduleinfo, $course, $mform = null) {
 
     $updateinstancefunction = $moduleinfo->modulename."_update_instance";
     if (!$updateinstancefunction($moduleinfo, $mform)) {
-        throw new \moodle_exception('cannotupdatemod', '', course_get_url($course, $cm->section), $moduleinfo->modulename);
+        print_error('cannotupdatemod', '', course_get_url($course, $cm->section), $moduleinfo->modulename);
     }
 
     // This needs to happen AFTER the grademin/grademax have already been updated.
@@ -666,8 +655,7 @@ function update_moduleinfo($cm, $moduleinfo, $course, $mform = null) {
                 $newgradeitem->grademax
             );
             if (!component_callback('mod_' . $moduleinfo->modulename, 'rescale_activity_grades', $params)) {
-                throw new \moodle_exception('cannotreprocessgrades', '', course_get_url($course, $cm->section),
-                    $moduleinfo->modulename);
+                print_error('cannotreprocessgrades', '', course_get_url($course, $cm->section), $moduleinfo->modulename);
             }
         }
     }
@@ -755,7 +743,6 @@ function get_moduleinfo_data($cm, $course) {
     $data->completiongradeitemnumber = $cm->completiongradeitemnumber;
     $data->showdescription    = $cm->showdescription;
     $data->downloadcontent    = $cm->downloadcontent;
-    $data->lang               = $cm->lang;
     $data->tags               = core_tag_tag::get_item_tags_array('core', 'course_modules', $cm->id);
     if (!empty($CFG->enableavailability)) {
         $data->availabilityconditionsjson = $cm->availability;

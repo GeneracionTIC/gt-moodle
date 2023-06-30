@@ -52,8 +52,7 @@ const reloadSettingsConditionsRegion = (reportElement, templateContext) => {
 
     return Templates.renderForPromise('core_reportbuilder/local/settings/conditions', {conditions: templateContext})
         .then(({html, js}) => {
-            const conditionsjs = $.parseHTML(templateContext.javascript, null, true).map(node => node.innerHTML).join("\n");
-            Templates.replaceNode(settingsConditionsRegion, html, js + conditionsjs);
+            Templates.replaceNode(settingsConditionsRegion, html, js + templateContext.javascript);
 
             initConditionsForm();
 

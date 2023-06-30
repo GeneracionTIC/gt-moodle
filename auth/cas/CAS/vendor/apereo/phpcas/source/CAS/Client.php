@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * PHP Version 7
+ * PHP Version 5
  *
  * @file     CAS/Client.php
  * @category Authentication
@@ -102,10 +102,6 @@ class CAS_Client
      */
     public function printHTMLHeader($title)
     {
-        if (!phpCAS::getVerbose()) {
-            return;
-        }
-
         $this->_htmlFilterOutput(
             str_replace(
                 '__TITLE__', $title,
@@ -134,17 +130,16 @@ class CAS_Client
      */
     public function printHTMLFooter()
     {
-        if (!phpCAS::getVerbose()) {
-            return;
-        }
-
         $lang = $this->getLangObj();
-        $message = empty($this->_output_footer)
-            ? '<hr><address>phpCAS __PHPCAS_VERSION__ ' . $lang->getUsingServer() .
-              ' <a href="__SERVER_BASE_URL__">__SERVER_BASE_URL__</a> (CAS __CAS_VERSION__)</a></address></body></html>'
-            : $this->_output_footer;
-
-        $this->_htmlFilterOutput($message);
+        $this->_htmlFilterOutput(
+            empty($this->_output_footer)?
+            (phpCAS::getVerbose())?
+                '<hr><address>phpCAS __PHPCAS_VERSION__ '
+                .$lang->getUsingServer()
+                .' <a href="__SERVER_BASE_URL__">__SERVER_BASE_URL__</a> (CAS __CAS_VERSION__)</a></address></body></html>'
+                :'</body></html>'
+            :$this->_output_footer
+        );
     }
 
     /**
@@ -179,21 +174,6 @@ class CAS_Client
         $this->_output_footer = $footer;
     }
 
-    /**
-     * Simple wrapper for printf function, that respects
-     * phpCAS verbosity setting.
-     *
-     * @param string $format
-     * @param string|int|float ...$values
-     *
-     * @see printf()
-     */
-    private function printf(string $format, ...$values): void
-    {
-        if (phpCAS::getVerbose()) {
-            printf($format, ...$values);
-        }
-    }
 
     /** @} */
 
@@ -918,14 +898,6 @@ class CAS_Client
      * @param bool                     $changeSessionID Allow phpCAS to change the session_id
      *                                                  (Single Sign Out/handleLogoutRequests
      *                                                  is based on that change)
-     * @param string|string[]|CAS_ServiceBaseUrl_Interface
-     *                                 $service_base_url the base URL (protocol, host and the
-     *                                                  optional port) of the CAS client; pass
-     *                                                  in an array to use auto discovery with
-     *                                                  an allowlist; pass in
-     *                                                  CAS_ServiceBaseUrl_Interface for custom
-     *                                                  behavior. Added in 1.6.0. Similar to
-     *                                                  serverName config in other CAS clients.
      * @param \SessionHandlerInterface $sessionHandler  the session handler
      *
      * @return self a newly created CAS_Client object
@@ -936,7 +908,6 @@ class CAS_Client
         $server_hostname,
         $server_port,
         $server_uri,
-        $service_base_url,
         $changeSessionID = true,
         \SessionHandlerInterface $sessionHandler = null
     ) {
@@ -953,8 +924,6 @@ class CAS_Client
             throw new CAS_TypeMismatchException($server_uri, '$server_uri', 'string');
         if (gettype($changeSessionID) != 'boolean')
             throw new CAS_TypeMismatchException($changeSessionID, '$changeSessionID', 'boolean');
-
-        $this->_setServiceBaseUrl($service_base_url);
 
         if (empty($sessionHandler)) {
             $sessionHandler = new CAS_Session_PhpSession;
@@ -1060,7 +1029,7 @@ class CAS_Client
 
         if ( $this->_isCallbackMode() ) {
             //callback mode: check that phpCAS is secured
-            if ( !$this->getServiceBaseUrl()->isHttps() ) {
+            if ( !$this->_isHttps() ) {
                 phpCAS::error(
                     'CAS proxies must be secured to use phpCAS; PGT\'s will not be received from the CAS server'
                 );
@@ -1068,7 +1037,7 @@ class CAS_Client
         } else {
             //normal mode: get ticket and remove it from CGI parameters for
             // developers
-            $ticket = (isset($_GET['ticket']) ? $_GET['ticket'] : '');
+            $ticket = (isset($_GET['ticket']) ? $_GET['ticket'] : null);
             if (preg_match('/^[SP]T-/', $ticket) ) {
                 phpCAS::trace('Ticket \''.$ticket.'\' found');
                 $this->setTicket($ticket);
@@ -1584,7 +1553,7 @@ class CAS_Client
     {
         phpCAS::traceBegin();
         $res = false;
-
+        $validate_url = '';
         if ( $this->_wasPreviouslyAuthenticated() ) {
             if ($this->hasTicket()) {
                 // User has a additional ticket but was already authenticated
@@ -1618,10 +1587,6 @@ class CAS_Client
             $this->markAuthenticationCall($res);
         } else {
             if ($this->hasTicket()) {
-                $validate_url = '';
-                $text_response = '';
-                $tree_response = '';
-
                 switch ($this->getServerVersion()) {
                 case CAS_VERSION_1_0:
                     // if a Service Ticket was given, validate it
@@ -1685,7 +1650,7 @@ class CAS_Client
                     $logoutTicket = $this->getTicket();
                     break;
                 default:
-                    phpCAS::trace('Protocol error');
+                    phpCAS::trace('Protocoll error');
                     break;
                 }
             } else {
@@ -1862,7 +1827,7 @@ class CAS_Client
         phpCAS::trace("Redirect to : ".$cas_url);
         $lang = $this->getLangObj();
         $this->printHTMLHeader($lang->getAuthenticationWanted());
-        $this->printf('<p>'. $lang->getShouldHaveBeenRedirected(). '</p>', $cas_url);
+        printf('<p>'. $lang->getShouldHaveBeenRedirected(). '</p>', $cas_url);
         $this->printHTMLFooter();
         phpCAS::traceExit();
         throw new CAS_GracefullTerminationException();
@@ -1905,7 +1870,7 @@ class CAS_Client
         }
         $lang = $this->getLangObj();
         $this->printHTMLHeader($lang->getLogout());
-        $this->printf('<p>'.$lang->getShouldHaveBeenRedirected(). '</p>', $cas_url);
+        printf('<p>'.$lang->getShouldHaveBeenRedirected(). '</p>', $cas_url);
         $this->printHTMLFooter();
         phpCAS::traceExit();
         throw new CAS_GracefullTerminationException();
@@ -2194,8 +2159,6 @@ class CAS_Client
             $validate_url .= '&renew=true';
         }
 
-        $headers = '';
-        $err_msg = '';
         // open and read the URL
         if ( !$this->_readURL($validate_url, $headers, $text_response, $err_msg) ) {
             phpCAS::trace(
@@ -2272,8 +2235,6 @@ class CAS_Client
             $validate_url .= '&renew=true';
         }
 
-        $headers = '';
-        $err_msg = '';
         // open and read the URL
         if ( !$this->_readURL($validate_url, $headers, $text_response, $err_msg) ) {
             phpCAS::trace(
@@ -2589,7 +2550,8 @@ class CAS_Client
         // the URL is built when needed only
         if ( empty($this->_callback_url) ) {
             // remove the ticket if present in the URL
-            $final_uri = $this->getServiceBaseUrl()->get();
+            $final_uri = 'https://';
+            $final_uri .= $this->_getClientUrl();
             $request_uri = $_SERVER['REQUEST_URI'];
             $request_uri = preg_replace('/\?.*$/', '', $request_uri);
             $final_uri .= $request_uri;
@@ -2930,8 +2892,6 @@ class CAS_Client
         $cas_url = $this->getServerProxyURL().'?targetService='
             .urlencode($target_service).'&pgt='.$this->_getPGT();
 
-        $headers = '';
-        $cas_response = '';
         // open and read the URL
         if ( !$this->_readURL($cas_url, $headers, $cas_response, $err_msg) ) {
             phpCAS::trace(
@@ -3957,7 +3917,10 @@ class CAS_Client
         // the URL is built when needed only
         if ( empty($this->_url) ) {
             // remove the ticket if present in the URL
-            $final_uri = $this->getServiceBaseUrl()->get();
+            $final_uri = ($this->_isHttps()) ? 'https' : 'http';
+            $final_uri .= '://';
+
+            $final_uri .= $this->_getClientUrl();
             $request_uri = explode('?', $_SERVER['REQUEST_URI'], 2);
             $final_uri .= $request_uri[0];
 
@@ -3994,61 +3957,65 @@ class CAS_Client
         return $this->_server['base_url'] = $url;
     }
 
-    /**
-     * The ServiceBaseUrl object that provides base URL during service URL
-     * discovery process.
-     *
-     * @var CAS_ServiceBaseUrl_Interface
-     *
-     * @hideinitializer
-     */
-    private $_serviceBaseUrl = null;
 
     /**
-     * Answer the CAS_ServiceBaseUrl_Interface object for this client.
+     * Try to figure out the phpCAS client URL with possible Proxys / Ports etc.
      *
-     * @return CAS_ServiceBaseUrl_Interface
+     * @return string Server URL with domain:port
      */
-    public function getServiceBaseUrl()
+    private function _getClientUrl()
     {
-        if (empty($this->_serviceBaseUrl)) {
-            phpCAS::error("ServiceBaseUrl object is not initialized");
+        if (!empty($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+            // explode the host list separated by comma and use the first host
+            $hosts = explode(',', $_SERVER['HTTP_X_FORWARDED_HOST']);
+            // see rfc7239#5.3 and rfc7230#2.7.1: port is in HTTP_X_FORWARDED_HOST if non default
+            return $hosts[0];
+        } else if (!empty($_SERVER['HTTP_X_FORWARDED_SERVER'])) {
+            $server_url = $_SERVER['HTTP_X_FORWARDED_SERVER'];
+        } else {
+            if (empty($_SERVER['SERVER_NAME'])) {
+                $server_url = $_SERVER['HTTP_HOST'];
+            } else {
+                $server_url = $_SERVER['SERVER_NAME'];
+            }
         }
-        return $this->_serviceBaseUrl;
+        if (!strpos($server_url, ':')) {
+            if (empty($_SERVER['HTTP_X_FORWARDED_PORT'])) {
+                $server_port = $_SERVER['SERVER_PORT'];
+            } else {
+                $ports = explode(',', $_SERVER['HTTP_X_FORWARDED_PORT']);
+                $server_port = $ports[0];
+            }
+
+            if ( ($this->_isHttps() && $server_port!=443)
+                || (!$this->_isHttps() && $server_port!=80)
+            ) {
+                $server_url .= ':';
+                $server_url .= $server_port;
+            }
+        }
+        return $server_url;
     }
 
     /**
-     * This method sets the service base URL used during service URL discovery process.
+     * This method checks to see if the request is secured via HTTPS
      *
-     * This is required since phpCAS 1.6.0 to protect the integrity of the authentication.
-     *
-     * @since phpCAS 1.6.0
-     *
-     * @param $name can be any of the following:
-     *   - A base URL string. The service URL discovery will always use this (protocol,
-     *     hostname and optional port number) without using any external host names.
-     *   - An array of base URL strings. The service URL discovery will check against
-     *     this list before using the auto discovered base URL. If there is no match,
-     *     the first base URL in the array will be used as the default. This option is
-     *     helpful if your PHP website is accessible through multiple domains without a
-     *     canonical name, or through both HTTP and HTTPS.
-     *   - A class that implements CAS_ServiceBaseUrl_Interface. If you need to customize
-     *     the base URL discovery behavior, you can pass in a class that implements the
-     *     interface.
-     *
-     * @return void
+     * @return bool true if https, false otherwise
      */
-    private function _setServiceBaseUrl($name)
+    private function _isHttps()
     {
-        if (is_array($name)) {
-            $this->_serviceBaseUrl = new CAS_ServiceBaseUrl_AllowedListDiscovery($name);
-        } else if (is_string($name)) {
-            $this->_serviceBaseUrl = new CAS_ServiceBaseUrl_Static($name);
-        } else if ($name instanceof CAS_ServiceBaseUrl_Interface) {
-            $this->_serviceBaseUrl = $name;
-        } else {
-            throw new CAS_TypeMismatchException($name, '$name', 'array, string, or CAS_ServiceBaseUrl_Interface object');
+        if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+            return ($_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTOCOL'])) {
+            return ($_SERVER['HTTP_X_FORWARDED_PROTOCOL'] === 'https');
+        } elseif ( isset($_SERVER['HTTPS'])
+            && !empty($_SERVER['HTTPS'])
+            && strcasecmp($_SERVER['HTTPS'], 'off') !== 0
+        ) {
+            return true;
         }
+        return false;
+
     }
 
     /**
@@ -4180,7 +4147,7 @@ class CAS_Client
         phpCAS::traceBegin();
         $lang = $this->getLangObj();
         $this->printHTMLHeader($lang->getAuthenticationFailed());
-        $this->printf(
+        printf(
             $lang->getYouWereNotAuthenticated(), htmlentities($this->getURL()),
             isset($_SERVER['SERVER_ADMIN']) ? $_SERVER['SERVER_ADMIN']:''
         );

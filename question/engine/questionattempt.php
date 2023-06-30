@@ -1823,39 +1823,36 @@ class question_attempt_step_iterator implements Iterator, ArrayAccess {
     }
 
     /** @return question_attempt_step */
-    #[\ReturnTypeWillChange]
     public function current() {
         return $this->offsetGet($this->i);
     }
     /** @return int */
-    #[\ReturnTypeWillChange]
     public function key() {
         return $this->i;
     }
-    public function next(): void {
+    public function next() {
         ++$this->i;
     }
-    public function rewind(): void {
+    public function rewind() {
         $this->i = 0;
     }
     /** @return bool */
-    public function valid(): bool {
+    public function valid() {
         return $this->offsetExists($this->i);
     }
 
     /** @return bool */
-    public function offsetExists($i): bool {
+    public function offsetExists($i) {
         return $i >= 0 && $i < $this->qa->get_num_steps();
     }
     /** @return question_attempt_step */
-    #[\ReturnTypeWillChange]
     public function offsetGet($i) {
         return $this->qa->get_step($i);
     }
-    public function offsetSet($offset, $value): void {
+    public function offsetSet($offset, $value) {
         throw new coding_exception('You are only allowed read-only access to question_attempt::states through a question_attempt_step_iterator. Cannot set.');
     }
-    public function offsetUnset($offset): void {
+    public function offsetUnset($offset) {
         throw new coding_exception('You are only allowed read-only access to question_attempt::states through a question_attempt_step_iterator. Cannot unset.');
     }
 }
@@ -1869,11 +1866,11 @@ class question_attempt_step_iterator implements Iterator, ArrayAccess {
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class question_attempt_reverse_step_iterator extends question_attempt_step_iterator {
-    public function next(): void {
+    public function next() {
         --$this->i;
     }
 
-    public function rewind(): void {
+    public function rewind() {
         $this->i = $this->qa->get_num_steps() - 1;
     }
 }
@@ -1945,23 +1942,21 @@ class question_attempt_steps_with_submitted_response_iterator extends question_a
     }
 
     /** @return question_attempt_step */
-    #[\ReturnTypeWillChange]
     public function current() {
         return $this->offsetGet($this->submittedresponseno);
     }
     /** @return int */
-    #[\ReturnTypeWillChange]
     public function key() {
         return $this->submittedresponseno;
     }
-    public function next(): void {
+    public function next() {
         ++$this->submittedresponseno;
     }
-    public function rewind(): void {
+    public function rewind() {
         $this->submittedresponseno = 1;
     }
     /** @return bool */
-    public function valid(): bool {
+    public function valid() {
         return $this->submittedresponseno >= 1 && $this->submittedresponseno <= count($this->stepswithsubmittedresponses);
     }
 
@@ -1969,7 +1964,7 @@ class question_attempt_steps_with_submitted_response_iterator extends question_a
      * @param int $submittedresponseno
      * @return bool
      */
-    public function offsetExists($submittedresponseno): bool {
+    public function offsetExists($submittedresponseno) {
         return $submittedresponseno >= 1;
     }
 
@@ -1977,7 +1972,6 @@ class question_attempt_steps_with_submitted_response_iterator extends question_a
      * @param int $submittedresponseno
      * @return question_attempt_step
      */
-    #[\ReturnTypeWillChange]
     public function offsetGet($submittedresponseno) {
         if ($submittedresponseno > count($this->stepswithsubmittedresponses)) {
             return null;
@@ -1989,7 +1983,7 @@ class question_attempt_steps_with_submitted_response_iterator extends question_a
     /**
      * @return int the count of steps with tries.
      */
-    public function count(): int {
+    public function count() {
         return count($this->stepswithsubmittedresponses);
     }
 
@@ -2008,11 +2002,11 @@ class question_attempt_steps_with_submitted_response_iterator extends question_a
         }
     }
 
-    public function offsetSet($offset, $value): void {
+    public function offsetSet($offset, $value) {
         throw new coding_exception('You are only allowed read-only access to question_attempt::states '.
                                    'through a question_attempt_step_iterator. Cannot set.');
     }
-    public function offsetUnset($offset): void {
+    public function offsetUnset($offset) {
         throw new coding_exception('You are only allowed read-only access to question_attempt::states '.
                                    'through a question_attempt_step_iterator. Cannot unset.');
     }
