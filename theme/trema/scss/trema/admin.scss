@@ -1,0 +1,115 @@
+body.path-admin {
+	.header-maxwidth {
+		max-width: $course-content-maxwidth;
+		margin: 0 auto;
+		padding: 0;
+	}
+
+	#page.drawers #topofscroll {
+		margin-top: 0;
+		padding-top: 0;
+		background-color: transparent;
+	}
+
+	.secondary-navigation {
+		padding: 1rem 0;
+		width: calc(100% - 6rem);
+		margin: 0 auto;
+		max-width: $course-content-maxwidth;
+	}
+
+	#page-content {
+		&.d-print-block {
+			margin: 0 3rem;
+		}
+	}
+
+	#region-main {
+		padding: 1.5rem;
+		overflow: visible;
+	}
+
+    #region-main-box {
+        padding: 0;
+	}
+}
+
+body.path-admin {
+	#region-main {
+		@extend %border-frequency;
+		&:before {
+			height: 1rem;
+			top: -1rem;
+		}
+		&:after {
+			height: 0.15rem;
+		}
+	}
+}
+
+body#page-search-index {
+	#region-main {
+		padding: 2rem;
+		@extend %border-frequency;
+		&:before {
+			height: 1rem;
+			top: -1rem;
+		}
+		&:after {
+			height: 0.15rem;
+		}
+	}
+}
+
+body.path-admin.pagelayout-maintenance {
+	#region-main {
+		&:before {
+			content: none;
+		}
+		&:after {
+			content: none;
+		}
+	}
+}
+
+#page-admin-search {
+	.simplesearchform {
+		input.form-control[type="text"] {
+			width: auto;
+		}
+		[type="submit"] {
+			margin: 0 .5rem;
+		}
+	}
+
+	#page-header {
+		max-width: none;
+        padding: 0;
+        margin: 0 4rem;
+
+		.mr-auto {
+			margin-right: 0 !important;
+		}
+
+		.ml-auto {
+			margin-left: 0 !important;
+		}
+	}
+
+	#page-content {
+		margin: 0;
+
+        h4 {
+            font-size: 1.4rem;
+        }
+	}
+}
+
+body.path-admin-report-log {
+	#page form {
+		.custom-select {
+			width: auto;
+			display: inline-block;
+		}
+	}
+}

@@ -1,0 +1,113 @@
+.drawer {
+    top: 4rem;
+    padding: 1rem;
+    height: calc(100% - 4rem);
+    background: #29292a;
+
+    .drawerheader {
+        .icon {
+            color: $white;
+        }
+    }
+
+    nav.list-group {
+        border-top: 1px solid #444;
+        padding-top: 0.5rem;
+
+        &:first-child {
+            border: none;
+            padding-top: 0;
+        }
+
+        .list-group-item {
+            border: none;
+            color: #aaa;
+            background-color: transparent;
+            transition: all 0.5s ease;
+
+            .icon {
+                font-size: 20px;
+                margin-right: 1rem;
+            }
+
+            &.active {
+                color: $white;
+            }
+
+            &:hover,
+            &:focus {
+                color: lighten($primary, 30%);
+                background-color: rgba($primary, 0.05);
+            }
+        }
+    }
+}
+
+body div#page {
+    padding: 0;
+    div.secondary-navigation {
+
+        li.nav-item {
+            border-bottom: none;
+        }
+    }
+}
+
+[data-region="drawer-toggle"] button {
+    &:hover,
+    &:focus,
+    &:active {
+        i.fa {
+            animation: shake 1200ms;
+        }
+    }
+}
+
+[data-parent-key="mycourses"].list-group-item {
+    padding-left: 2.5rem;
+}
+
+#theme_boost-drawers-courseindex {
+    .courseindex .courseindex-item .courseindex-link,
+    .courseindex .courseindex-item .courseindex-chevron {
+        color: #fff;
+
+        &:hover {
+            color: lighten($primary, 30%);
+            background-color: rgba($primary, 0.05);
+        }
+    }
+}
+
+@mixin shake ($n) {
+    0% {
+        transform: rotateZ(0);
+    }
+    $pos: 1;
+    @for $i from 1 through 9 {
+        $pos: $pos * -1;
+        $m: ($n / $i) * $pos;
+        #{ $i * 10% }
+        {
+            transform: rotateZ($m * 1deg);
+        }
+    }
+    100% {
+        transform: rotateZ(0);
+    }
+}
+
+@keyframes shake {
+    @include shake(30);
+}
+
+.drawercontent::-webkit-scrollbar-thumb {
+    background-color: #fff;
+    border-radius: 20px;
+    border: 3px solid #c8c8c8;
+}
+
+.drawercontent::-webkit-scrollbar-track {
+    background: #6e6e6e;
+    border-radius: 20px;
+}
