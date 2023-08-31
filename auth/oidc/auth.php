@@ -314,7 +314,7 @@ class auth_plugin_oidc extends \auth_plugin_base {
                 $logouturl = get_config('auth_oidc', 'logouturi');
 		//$logouturl .= '?id_token_hint='. $tokenrec->token;
 		$logouturl .= '?id_token_hint='. $tokenrec->idtoken;
-                $logouturl .= '&post_logout_redirect_uri=https://aulas.generaciontic.gov.co/';//. urlencode($CFG->wwwroot);
+                $logouturl .= '&post_logout_redirect_uri=https://aulas.generaciontic.gov.co';//. urlencode($CFG->wwwroot);
                 redirect($logouturl);
             }
         }
